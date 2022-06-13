@@ -22,4 +22,4 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         pre_build_commands: apk --update add imagemagick
-        target_branch: 'build'
+        target_branch: gh-pages
