@@ -1,4 +1,4 @@
-name: Build and deploy Jekyll site to GitHub Pages
+name: custom-build-jekyll-action
 
 on:
   push:
