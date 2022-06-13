@@ -28,4 +28,4 @@ and alter the final action easily without having to re-program the NFC tag.
 The POST messgage is later captured by an instance of [Node-RED](https://nodered.org/), which finally toggles the living room lights group created on
 [Home Assistant](https://www.home-assistant.io/), picture below:
 
-![Node-Red screenshot]({{ '/assets/images/2022/05/22/nodered.png' | resize: "800x800>" }})
+![Node-Red screenshot](/assets/images/2022/05/22/nodered.png)
