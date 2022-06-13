@@ -4,5 +4,8 @@ _site
 .jekyll-metadata
 vendor
 
+# custom
+cache/
+
 # vim
 *.swp
