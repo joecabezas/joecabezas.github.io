@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="https://blog.k014.net/feed.xml" rel="self" type="application/atom+xml" /><link href="https://blog.k014.net/" rel="alternate" type="text/html" /><updated>2022-06-13T15:36:10+00:00</updated><id>https://blog.k014.net/feed.xml</id><title type="html">k014’s Blog</title><subtitle>I use this space as a way to document what I am currently studying and projects I am working on, I hope you find something useful around</subtitle><entry><title type="html">NFC Sofa Hack</title><link href="https://blog.k014.net/2022/05/22/nfc-sofa-hack.html" rel="alternate" type="text/html" title="NFC Sofa Hack" /><published>2022-05-22T00:00:00+00:00</published><updated>2022-05-22T00:00:00+00:00</updated><id>https://blog.k014.net/2022/05/22/nfc-sofa-hack</id><content type="html" xml:base="https://blog.k014.net/2022/05/22/nfc-sofa-hack.html"><![CDATA[<p><img src="/cache/resize/d4d858f6dab272bfa4504fd872690033_800x800.png" alt="Inserting the NFC tag inside sofa armrest" /></p>
+
+<p>When I started playing with home automation I purchased this pack of <a href="https://www.amazon.com/dp/B08DD24Z5K">50 NFC215 Round Cards</a> this are tags that
+can hold up to <a href="https://www.shopnfc.com/en/content/6-nfc-tags-specs">540 bytes of data</a>, which is enough for short messages like web links, personal
+information sharing, wifi credentials sharing, etc. in this opportunity I wanted to used them as a way to toggle the living room lights.</p>
+
+<p><img src="https://youtu.be/tqbdaos9qr0" alt="a" /></p>
+
+<p>At first I wanted the NFC tag to be programmed to send a simple UDP message to a specific IP (my home automation server running on a Raspberry Pi 4),
+but it turns out that the standard for NFC actions that can be programmed is very limited to just open web links, create a new contact on a phone,
+or add new Wifi credentials. in order make this there are software that allows you to program tons of actions like sending UDP packets, turn on
+bluetooth, etc. The only catch is that the reading phone needs to have installed the software that interprets the action, the good thing is that, the
+the software
+<a href="https://play.google.com/store/apps/details?id=com.wakdev.nfctools.prohttps://play.google.com/store/apps/details?id=com.wakdev.nfctools.pro">(NFC Tools Pro)</a>
+does this in a clever way, when adding a custom action it actually creates 2 actions in the NFC tag: one to visit the link of the software
+google play page for download, and if the phone already have it, it will just execute the action, so I am ok with this then.</p>
+
+<p>what I ended up doing is sending a POST request to my Raspberryi Pi with a unique id that describes the position of this NFC tag, therefore, the actual
+action of turning on the lights is later decided by the central Raspberryi Pi, the NFC tag only sends the message with it’s ID, this allows me to configure
+and alter the final action easily without having to re-program the NFC tag.</p>
+
+<p>The POST messgage is later captured by an instance of <a href="https://nodered.org/">Node-RED</a>, which finally toggles the living room lights group created on
+<a href="https://www.home-assistant.io/">Home Assistant</a>, picture below:</p>
+
+<p><img src="/cache/resize/fa9ffec8e5893634ac660c72eb821a37_800x800.png" alt="Node-Red screenshot" /></p>]]></content><author><name></name></author><category term="nfc" /><category term="home-automation" /><category term="node-red" /><category term="hack" /><summary type="html"><![CDATA[]]></summary></entry></feed>

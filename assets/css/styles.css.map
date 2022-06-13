@@ -1,0 +1,14 @@
+{
+	"version": 3,
+	"file": "styles.css",
+	"sources": [
+		"styles.scss",
+		"_sass/main.scss"
+	],
+	"sourcesContent": [
+		"@import \"main\";\n",
+		"p img,iframe {\n  display: block;\n  margin-left: auto;\n  margin-right: auto;\n}\n"
+	],
+	"names": [],
+	"mappings": "ACAA,AAAA,CAAC,CAAC,GAAG,EAAC,MAAM,CAAC,EACX,OAAO,EAAE,KAAK,EACd,WAAW,EAAE,IAAI,EACjB,YAAY,EAAE,IAAI,GACnB"
+}

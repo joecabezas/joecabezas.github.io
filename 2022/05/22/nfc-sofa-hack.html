@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>NFC Sofa Hack | k014’s Blog</title>
+<meta name="generator" content="Jekyll v4.2.2">
+<meta property="og:title" content="NFC Sofa Hack">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="I use this space as a way to document what I am currently studying and projects I am working on, I hope you find something useful around">
+<meta property="og:description" content="I use this space as a way to document what I am currently studying and projects I am working on, I hope you find something useful around">
+<link rel="canonical" href="https://blog.k014.net/2022/05/22/nfc-sofa-hack.html">
+<meta property="og:url" content="https://blog.k014.net/2022/05/22/nfc-sofa-hack.html">
+<meta property="og:site_name" content="k014’s Blog">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2022-05-22T00:00:00+00:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="NFC Sofa Hack">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-05-22T00:00:00+00:00","datePublished":"2022-05-22T00:00:00+00:00","description":"I use this space as a way to document what I am currently studying and projects I am working on, I hope you find something useful around","headline":"NFC Sofa Hack","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.k014.net/2022/05/22/nfc-sofa-hack.html"},"url":"https://blog.k014.net/2022/05/22/nfc-sofa-hack.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css">
+  <link rel="stylesheet" href="/assets/css/styles.css">
+<link type="application/atom+xml" rel="alternate" href="https://blog.k014.net/feed.xml" title="k014's Blog">
+</head>
+<body>
+<header class="site-header" role="banner">
+
+  <div class="wrapper">
+<a class="site-title" rel="author" href="/">k014's Blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger">
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewbox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"></div>
+      </nav>
+</div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">NFC Sofa Hack</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2022-05-22T00:00:00+00:00" itemprop="datePublished">May 22, 2022
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p><img src="/cache/resize/d4d858f6dab272bfa4504fd872690033_800x800.png" alt="Inserting the NFC tag inside sofa armrest"></p>
+
+<p>When I started playing with home automation I purchased this pack of <a href="https://www.amazon.com/dp/B08DD24Z5K">50 NFC215 Round Cards</a> this are tags that
+can hold up to <a href="https://www.shopnfc.com/en/content/6-nfc-tags-specs">540 bytes of data</a>, which is enough for short messages like web links, personal
+information sharing, wifi credentials sharing, etc. in this opportunity I wanted to used them as a way to toggle the living room lights.</p>
+
+<p><iframe id="media-tqbdaos9qr0" class="media" src="https://www.youtube.com/embed/tqbdaos9qr0" title="" width="100%" height="350" style="max-width: 600px;outline: none" allow="encrypted-media; picture-in-picture" frameborder="0" allowfullscreen></iframe></p>
+
+<p>At first I wanted the NFC tag to be programmed to send a simple UDP message to a specific IP (my home automation server running on a Raspberry Pi 4),
+but it turns out that the standard for NFC actions that can be programmed is very limited to just open web links, create a new contact on a phone,
+or add new Wifi credentials. in order make this there are software that allows you to program tons of actions like sending UDP packets, turn on
+bluetooth, etc. The only catch is that the reading phone needs to have installed the software that interprets the action, the good thing is that, the
+the software
+<a href="https://play.google.com/store/apps/details?id=com.wakdev.nfctools.prohttps://play.google.com/store/apps/details?id=com.wakdev.nfctools.pro">(NFC Tools Pro)</a>
+does this in a clever way, when adding a custom action it actually creates 2 actions in the NFC tag: one to visit the link of the software
+google play page for download, and if the phone already have it, it will just execute the action, so I am ok with this then.</p>
+
+<p>what I ended up doing is sending a POST request to my Raspberryi Pi with a unique id that describes the position of this NFC tag, therefore, the actual
+action of turning on the lights is later decided by the central Raspberryi Pi, the NFC tag only sends the message with it’s ID, this allows me to configure
+and alter the final action easily without having to re-program the NFC tag.</p>
+
+<p>The POST messgage is later captured by an instance of <a href="https://nodered.org/">Node-RED</a>, which finally toggles the living room lights group created on
+<a href="https://www.home-assistant.io/">Home Assistant</a>, picture below:</p>
+
+<p><img src="/cache/resize/fa9ffec8e5893634ac660c72eb821a37_800x800.png" alt="Node-Red screenshot"></p>
+
+  </div>
+<a class="u-url" href="/2022/05/22/nfc-sofa-hack.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">k014's Blog</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">k014's Blog</li>
+</ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+<ul class="social-media-list">
+<li><a href="https://github.com/joecabezas"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">joecabezas</span></a></li>
+<li><a href="https://www.linkedin.com/in/joecabezas"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">joecabezas</span></a></li>
+<li><a href="https://www.twitter.com/joecabezas"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">joecabezas</span></a></li>
+</ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>I use this space as a way to document what I am currently studying and projects I am working on, I hope you find something useful around</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
