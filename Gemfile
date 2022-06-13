@@ -18,7 +18,7 @@ group :jekyll_plugins do
   gem "jekyll-feed", "~> 0.12"
 
   # custom
-  gem "jekyll-image-size", "~> 1.2"
+  gem "jekyll-resize", git: "https://github.com/MichaelCurrin/jekyll-resize"
   gem 'jekyll-spaceship'
 end
 
