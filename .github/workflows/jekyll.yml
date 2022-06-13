@@ -21,3 +21,4 @@ jobs:
     - uses:  helaili/jekyll-action@v2
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
+        pre_build_commands: sudo apt install imagemagick
