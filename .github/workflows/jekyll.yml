@@ -21,5 +21,7 @@ jobs:
     - uses:  helaili/jekyll-action@v2
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        pre_build_commands: apk --update add imagemagick
+        pre_build_commands:
+          - apk --update add imagemagick
+          - apk --update add vips-tools
         target_branch: gh-pages

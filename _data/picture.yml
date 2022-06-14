@@ -1,0 +1,12 @@
+presets:
+  default:
+    widths: [200, 400, 740]
+    link_source: true
+
+  index:
+    widths: [200, 400]
+    crop: '1:1'
+    keep: attention
+
+  opener:
+    crop: '8:2'

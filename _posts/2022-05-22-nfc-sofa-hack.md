@@ -4,7 +4,12 @@ title: NFC Sofa Hack
 tags: nfc home-automation node-red hack
 ---
 
-![Inserting the NFC tag inside sofa armrest]({{ '/assets/images/2022/05/22/nfc-sofa-tag.png' | resize: "800x800>" }})
+{%
+  picture
+  opener
+  2022/05/22/nfc-sofa-tag.png
+  --alt Inserting the NFC tag inside sofa armrest
+%}
 
 When I started playing with home automation I purchased this pack of
 [50 NFC215 Round Cards](https://www.amazon.com/dp/B08DD24Z5K) this are tags
@@ -40,7 +45,11 @@ and alter the final action easily without having to re-program the NFC tag.
 The POST messgage is later captured by an instance of
 [Node-RED](https://nodered.org/)
 
-![Node-Red screenshot](/assets/images/2022/05/22/nodered.png)
+{%
+  picture
+  2022/05/22/nodered.png
+  --alt Node-Red screenshot
+%}
 
 Which takes the payload and filters the `id` (in the case of the sofa the id
 would be `living_room_nfc_tag_sofa_right_arm`) and assign an action, for now

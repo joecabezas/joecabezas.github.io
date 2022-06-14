@@ -54,3 +54,7 @@ plugins:
 #   - vendor/cache/
 #   - vendor/gems/
 #   - vendor/ruby/
+
+picture:
+  source: "assets/images/fullsize"
+  output: "assets/images/generated"
