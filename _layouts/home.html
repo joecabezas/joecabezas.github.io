@@ -1,0 +1,30 @@
+---
+layout: default
+---
+{{ content }}
+
+<div class="row my-3 row-cols-2 row-cols-md-3">
+  {%- for post in site.posts -%}
+  <div class="col my-3">
+    <div class="shadow card border-light">
+      {% picture index {{ post.image }} --alt {{ post.title }} %}
+      <div class="card-body py-2">
+        {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
+        <span class="post-meta">{{ post.date | date: date_format }}</span>
+        <a class="post-link" href="{{ post.url | relative_url }}">
+          <h5 class="card-title">
+            {{ post.title | escape }}
+          </h5>
+        </a>
+        <p class="card-text">
+        {%- if site.show_excerpts -%}
+        {{ post.excerpt }}
+        {%- endif -%}
+        </p>
+      </div>
+    </div>
+  </div>
+  {%- endfor -%}
+</div>
+
+<p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | relative_url }}">via RSS</a></p>

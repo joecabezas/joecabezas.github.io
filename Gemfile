@@ -18,8 +18,9 @@ group :jekyll_plugins do
   gem 'jekyll-feed', '~> 0.12'
 
   # custom
-  gem 'jekyll-spaceship'
+  gem 'jekyll-auto-image'
   gem 'jekyll_picture_tag'
+  gem 'jekyll-spaceship'
 end
 
 # Windows and JRuby does not include zoneinfo files, so bundle the tzinfo-data gem

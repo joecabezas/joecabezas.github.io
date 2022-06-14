@@ -4,9 +4,11 @@ presets:
     link_source: true
 
   index:
-    widths: [200, 400]
+    widths: [200]
     crop: '1:1'
-    keep: attention
+    keep: center
+    attributes:
+      img: 'class="card-img-top"'
 
   opener:
-    crop: '8:2'
+    crop: '5:2'

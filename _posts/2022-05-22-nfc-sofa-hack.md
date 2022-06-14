@@ -2,6 +2,7 @@
 layout: post
 title: NFC Sofa Hack
 tags: nfc home-automation node-red hack
+image: 2022/05/22/nfc-sofa-tag.png
 ---
 
 {%
