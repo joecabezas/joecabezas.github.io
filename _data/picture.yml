@@ -10,5 +10,10 @@ presets:
     attributes:
       img: 'class="card-img-top"'
 
+  square:
+    crop: '1:1'
+    keep: center
+    link_source: true
+
   opener:
     crop: '5:2'

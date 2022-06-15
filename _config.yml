@@ -31,6 +31,10 @@ linkedin_username: joecabezas
 
 # Build settings
 theme: minima
+
+minima:
+  skin: dark
+
 plugins:
   - jekyll-feed
   - jekyll-spaceship
@@ -58,3 +62,4 @@ plugins:
 picture:
   source: "assets/images/fullsize"
   output: "assets/images/generated"
+  nomarkdown: false

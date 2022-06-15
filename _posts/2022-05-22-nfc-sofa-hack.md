@@ -6,10 +6,10 @@ image: 2022/05/22/nfc-sofa-tag.png
 ---
 
 {%
-  picture
-  opener
-  2022/05/22/nfc-sofa-tag.png
-  --alt Inserting the NFC tag inside sofa armrest
+  include picture_with_note.html
+    preset="opener"
+    src="2022/05/22/nfc-sofa-tag.png"
+    alt="Inserting the NFC tag inside sofa armrest"
 %}
 
 When I started playing with home automation I purchased this pack of
@@ -21,7 +21,7 @@ sharing, wifi credentials sharing, etc. in this opportunity I wanted to used
 them as a
 way to toggle the living room lights.
 
-![a](https://youtu.be/tqbdaos9qr0)
+![](https://youtu.be/tqbdaos9qr0)
 
 At first I wanted the NFC tag to be programmed to send a simple UDP message to
 a specific IP (my home automation server running on a Raspberry Pi 4), but it
@@ -37,7 +37,7 @@ actions in the NFC tag: one to visit the link of the software google play page
 for download, and if the phone already have it, it will just execute the
 action, so I am ok with this then.
 
-What I ended up doing is sending a POST request to my Raspberryi Pi with a
+What I ended up doing is sending a POST request to my Raspberry Pi with a
 unique id that describes the position of this NFC tag, therefore, the actual
 action of turning on the lights is later decided by the central Raspberryi Pi,
 the NFC tag only sends the message with it's ID, this allows me to configure
@@ -47,9 +47,9 @@ The POST messgage is later captured by an instance of
 [Node-RED](https://nodered.org/)
 
 {%
-  picture
-  2022/05/22/nodered.png
-  --alt Node-Red screenshot
+  include picture_with_note.html
+    src="2022/05/22/nodered.png"
+    alt="Node-Red screenshot"
 %}
 
 Which takes the payload and filters the `id` (in the case of the sofa the id
