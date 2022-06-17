@@ -1,3 +1,114 @@
+@import "../node_modules/bootstrap/scss/functions";
+@import "../node_modules/bootstrap/scss/variables";
+
+$css-root-vars: (
+    color-font: #fff,
+    color-font-button: #0b0b0b,
+    color-alert-red: #f74856,
+    color-alert-orange: #ff970d,
+    color-body: #222327,
+    color-featured-label: #1a1a1a,
+    color-featured-label-mobile: #222327,
+    color-search-icon: #717171,
+    color-underline-link: #414242,
+    color-table-border: #414242,
+    color-figcaption: #c3c6c7,
+    color-hover-dot: #717171,
+    color-bg-textarea: #28292e,
+    color-bg-code: #32343a,
+    color-bg-tag: #414242,
+    color-bg-featured-label: #fff,
+    color-bg-featured-label-mobile: #f4f4f4,
+    color-bg-elements: #28292e,
+    color-bg-button-membership: #e2e5ed,
+    color-elements-one: #414242,
+    color-elements-two: #717171,
+    color-elements-white: #fff,
+    gradient-gray-start: #2b2d32,
+    gradient-gray-end: #32343a
+);
+
+$body-bg: map-get($css-root-vars, color-body);
+$body-color: map-get($css-root-vars, color-font);
+
+a {
+  color: var(--#{$prefix}link-color);
+  text-decoration: $link-decoration;
+
+  &:hover {
+    color: var(--#{$prefix}link-hover-color);
+    text-decoration: $link-hover-decoration;
+  }
+}
+
+.k014-title {
+  font-size: 44px;
+  color: $body-color;
+  text-decoration: none;
+
+  &:visited {
+    color: inherit;
+    text-decoration: inherit;
+  }
+
+  &:hover {
+    color: inherit;
+    text-decoration: inherit;
+  }
+}
+
+.post-content {
+  ul,p {
+    line-height: 1.65;
+    position: relative;
+    margin-top: 0px;
+    margin-bottom: 1.2em;
+
+    font-size: 1.2em;
+  }
+}
+
+.k014-post-card {
+  a {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .k014-post-card-image {
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: no-repeat center center;
+    background-size: cover;
+    border-radius: $border-radius-xl;
+  }
+
+  h1 {
+    text-shadow: 1px 1px $gray-800;
+    margin-right: 20%;
+  }
+
+  span {
+    font-size: 1em;
+  }
+
+  padding: 2.5em;
+  position: relative;
+  height: 100%;
+  min-height: 300px;
+}
+
+@import "../node_modules/bootstrap/scss/bootstrap";
+
 p img,iframe {
   display: block;
   margin-left: auto;

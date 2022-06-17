@@ -72,6 +72,7 @@ when they keys are placed?, this is what I came up with:
   include picture_with_note.html
     src="2022/06/15/mechanical-pulse-drawing.png"
     alt="Mechanical Diagram for pulse button"
+    class="w-75"
 %}
 
 The idea is to have a way to hold the keys and roll a wheel that presses a
@@ -96,7 +97,8 @@ Andreas video).
 {%
   include picture_with_note.html
     src="2022/06/15/mosfet-diagram.png"
-    alt="Mechanical diagram for pulse button"
+    alt="Power latch circuit with a MOSFET"
+    class="w-75"
 %}
 
 Here is the video of this idea being explained:

@@ -1,14 +1,11 @@
 presets:
   default:
-    widths: [200, 400, 740]
     link_source: true
 
   index:
-    widths: [200]
     crop: '1:1'
     keep: center
-    attributes:
-      img: 'class="card-img-top"'
+    markup: direct_url
 
   square:
     crop: '1:1'

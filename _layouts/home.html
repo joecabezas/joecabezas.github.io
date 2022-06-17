@@ -3,24 +3,17 @@ layout: default
 ---
 {{ content }}
 
-<div class="row my-3 row-cols-2 row-cols-md-3">
+<div class="row my-3 row-cols-2 row-cols-md-2">
   {%- for post in site.posts -%}
   <div class="col my-3">
-    <div class="shadow card border-light">
-      {% picture index {{ post.image }} --alt {{ post.title }} %}
-      <div class="card-body py-2">
-        {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
-        <span class="post-meta">{{ post.date | date: date_format }}</span>
-        <a class="post-link" href="{{ post.url | relative_url }}">
-          <h5 class="card-title">
-            {{ post.title | escape }}
-          </h5>
-        </a>
-        <p class="card-text">
-        {%- if site.show_excerpts -%}
-        {{ post.excerpt }}
-        {%- endif -%}
-        </p>
+    <div class="k014-post-card">
+      <a href="{{ post.url | relative_url }}">
+      </a>
+      <div class="k014-post-card-image" style="background-image: url({% picture index {{ post.image }} %})" />
+      <h1 class="card-title">{{ post.title | escape }}</h1>
+      {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
+      <div>
+        <span>{{ post.date | date: date_format }}</span>
       </div>
     </div>
   </div>

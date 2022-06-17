@@ -1,10 +1,18 @@
-<figure class="figure">
+<figure
+  class="
+  figure
+  mx-auto
+  d-block
+  {{ include.class }}
+  "
+  >
 {%
   picture
   {{ include.preset }}
   {{ include.src }}
   --alt {{ include.alt }}
-  --img class="shadow-sm border p-2 figure-img img-fluid rounded"
+  --img
+  class="shadow-sm border p-2 figure-img img-fluid rounded"
 %}
   <figcaption class="figure-caption text-end">{{ include.alt }}</figcaption>
 </figure>
