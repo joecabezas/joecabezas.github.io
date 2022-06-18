@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+
     - uses: actions/cache@v2
       with:
         path: vendor/bundle
@@ -17,8 +18,12 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-gems-
 
-    - uses: actions/setup-node@v1
-      with: { node-version: '12.x' }
+    - uses: actions/setup-node@v3
+      with:
+        node-version-file: '.node-version'
+        cache: 'npm'
+    - run: npm ci
+
     - uses: actions/cache@v2
       with:
         path: ~/.npm
@@ -33,5 +38,4 @@ jobs:
         pre_build_commands: |
           apk --update add imagemagick
           apk --update add vips-tools
-          npm install
         target_branch: gh-pages
