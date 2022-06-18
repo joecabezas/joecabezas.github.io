@@ -2,6 +2,8 @@ presets:
   default:
     link_source: true
 
+  logo:
+
   index:
     crop: '1:1'
     keep: center

@@ -3,21 +3,23 @@ layout: default
 ---
 {{ content }}
 
-<div class="row my-3 row-cols-2 row-cols-md-2">
-  {%- for post in site.posts -%}
-  <div class="col my-3">
-    <div class="k014-post-card">
-      <a href="{{ post.url | relative_url }}">
-      </a>
-      <div class="k014-post-card-image" style="background-image: url({% picture index {{ post.image }} %})" />
-      <h1 class="card-title">{{ post.title | escape }}</h1>
-      {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
-      <div>
-        <span>{{ post.date | date: date_format }}</span>
+<div class="container">
+  <div class="row my-3 row-cols-2 row-cols-md-2">
+    {%- for post in site.posts -%}
+    <div class="col my-3">
+      <div class="k014-post-card">
+        <a href="{{ post.url | relative_url }}">
+        </a>
+        <div class="k014-post-card-image" style="background-image: url({% picture index {{ post.image }} %})" />
+        <h1 class="card-title">{{ post.title | escape }}</h1>
+        {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
+        <div>
+          <span>{{ post.date | date: date_format }}</span>
+        </div>
       </div>
     </div>
+    {%- endfor -%}
   </div>
-  {%- endfor -%}
 </div>
 
 <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | relative_url }}">via RSS</a></p>

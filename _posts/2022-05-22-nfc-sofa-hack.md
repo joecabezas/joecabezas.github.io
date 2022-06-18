@@ -5,13 +5,6 @@ tags: nfc home-automation node-red hack
 image: 2022/05/22/nfc-sofa-tag.png
 ---
 
-{%
-  include picture_with_note.html
-    preset="opener"
-    src="2022/05/22/nfc-sofa-tag.png"
-    alt="Inserting the NFC tag inside sofa armrest"
-%}
-
 When I started playing with home automation I purchased this pack of
 [50 NFC215 Round Cards](https://www.amazon.com/dp/B08DD24Z5K) this are tags
 that can hold up to
@@ -36,6 +29,14 @@ does this in a clever way, when adding a custom action it actually creates 2
 actions in the NFC tag: one to visit the link of the software google play page
 for download, and if the phone already have it, it will just execute the
 action, so I am ok with this then.
+
+{%
+  include picture_with_note.html
+    preset="opener"
+    src="2022/05/22/nfc-sofa-tag.png"
+    alt="Inserting the NFC tag inside sofa armrest"
+    class="w-75"
+%}
 
 What I ended up doing is sending a POST request to my Raspberry Pi with a
 unique id that describes the position of this NFC tag, therefore, the actual
