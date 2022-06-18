@@ -17,6 +17,15 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-gems-
 
+    - uses: actions/setup-node@v1
+      with: { node-version: '12.x' }
+    - uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
     # Standard usage
     - uses:  helaili/jekyll-action@v2
       with:
@@ -24,4 +33,5 @@ jobs:
         pre_build_commands: |
           apk --update add imagemagick
           apk --update add vips-tools
+          npm install
         target_branch: gh-pages
