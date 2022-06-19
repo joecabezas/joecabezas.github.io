@@ -27,8 +27,6 @@ $css-root-vars: (
     color-elements-white: #fff,
     gradient-gray-start: #2b2d32,
     gradient-gray-end: #32343a,
-
-    k014-post-content-width: 700px
 );
 
 $body-bg: map-get($css-root-vars, color-body);
@@ -132,85 +130,113 @@ $k014-post-title-shadow: 0.5px 0.5px $gray-600;
   }
 }
 
-.k014-post-header {
-  position: relative;
+$k014-post-content-width: 700px;
+$k014-post-content-padding: 6em;
+article {
+  background-color: $body-bg;
+  z-index: 0;
+  @include border-bottom-radius(2.5em);
 
-  .k014-post-header-image {
+  .k014-post-header {
+    position: relative;
     z-index: -1;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: no-repeat center center;
-    background-size: cover;
 
-    &::after {
-      display: block;
+    .k014-post-header-image {
+      position: absolute;
       width: 100%;
       height: 100%;
-      content: '';
-      background-image: linear-gradient(
-      to bottom,
-      rgba(245, 246, 252, 0.2),
-      rgba(117, 19, 93, 0.6)
-      );
+      background: no-repeat center center;
+      background-size: cover;
+
+      &::after {
+        display: block;
+        width: 100%;
+        height: 100%;
+        content: '';
+        background-image: linear-gradient(
+        to bottom,
+        rgba(245, 246, 252, 0.2),
+        rgba(117, 19, 93, 0.6)
+        );
+      }
+
+      @media (min-width: 992px) {
+        width: calc(50% - 50px);
+      }
     }
 
-    @media (min-width: 992px) {
-      width: calc(50% - 50px);
+    .k014-post-header-headline {
+      width: 50%;
+      margin: auto;
+      min-height: 35vh;
+
+      h1 {
+        font-size: calc(2rem + 1.5vw) !important;
+        padding-top: 20px;
+        text-shadow: $k014-post-title-shadow;
+      }
+
+      @media (min-width: 992px) {
+        margin-left: 50%;
+        width: 40%;
+
+        h1 {
+          padding-top: 0.5em;
+          text-shadow: $k014-post-title-shadow;
+        }
+      }
     }
   }
 
-  .k014-post-header-headline {
-    width: 50%;
-    margin: auto;
-    min-height: 35vh;
-
-    h1 {
-      font-size: calc(2rem + 1.5vw) !important;
-      padding-top: 20px;
-      text-shadow: $k014-post-title-shadow;
-    }
+  .k014-post-content {
+    @include make-container();
+    background-color: $body-bg;
+    margin-top: -5vh;
+    padding-top: calc(#{$k014-post-content-padding} - 4em);
+    padding-left: calc(#{$k014-post-content-padding} - 4em);
+    padding-right: calc(#{$k014-post-content-padding} - 4em);
+    max-width: calc(100vw - 3em);
+    border-radius: $border-radius-2xl;
 
     @media (min-width: 992px) {
-      margin-left: 50%;
-      width: 40%;
+      margin-top: -7vh;
+      max-width: calc(#{$k014-post-content-width} + 2 * #{$k014-post-content-padding});
+      padding-top: calc(#{$k014-post-content-padding} - 3em);
+      padding-left: $k014-post-content-padding;
+      padding-right: $k014-post-content-padding;
+    }
 
-      h1 {
-        padding-top: 0.5em;
-        text-shadow: $k014-post-title-shadow;
-      }
+    ul,p {
+      line-height: 1.65;
+      position: relative;
+      margin-top: 0px;
+      margin-bottom: 1.2em;
+
+      font-size: 1.2em;
     }
   }
 }
 
-$k014-post-content-width: 700px;
-$k014-post-content-padding: 6em;
-.k014-post-content {
-  @include make-container();
+$k014-footer-background-color: #0a0a12;
+$k014-footer-icon-size: 1.5em;
+$k014-footer-jump-size: 2.5em;
+footer {
+  background-color: $k014-footer-background-color;
+  width: 100%;
 
-  margin-top: -5vh;
-  background-color: $body-bg;
-  padding-top: calc(#{$k014-post-content-padding} - 4em);
-  padding-left: calc(#{$k014-post-content-padding} - 4em);
-  padding-right: calc(#{$k014-post-content-padding} - 4em);
-  max-width: calc(100vw - 3em);
-  border-radius: $border-radius-2xl;
-
-  @media (min-width: 992px) {
-    margin-top: -7vh;
-    max-width: calc(#{$k014-post-content-width} + 2 * #{$k014-post-content-padding});
-    padding-top: calc(#{$k014-post-content-padding} - 3em);
-    padding-left: $k014-post-content-padding;
-    padding-right: $k014-post-content-padding;
+  .jump {
+    height: $k014-footer-jump-size;
+    background-color: $body-bg;
+    @include border-bottom-radius($k014-footer-jump-size);
   }
 
-  ul,p {
-    line-height: 1.65;
-    position: relative;
-    margin-top: 0px;
-    margin-bottom: 1.2em;
+  img {
+    height: 3em;
+  }
 
-    font-size: 1.2em;
+  li {
+    width: $k014-footer-icon-size;
+    height: $k014-footer-icon-size;
   }
 }
 

@@ -28,6 +28,8 @@ url: "https://blog.k014.net" # the base hostname & protocol for your site, e.g. 
 twitter_username: joecabezas
 github_username:  joecabezas
 linkedin_username: joecabezas
+youtube_channel_id: UC2UAfk6AmlYo0rjiHern06A
+rss: rss
 
 # Build settings
 theme: minima
