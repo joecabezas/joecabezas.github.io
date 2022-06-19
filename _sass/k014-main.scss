@@ -63,70 +63,77 @@ a {
   }
 }
 
-$k014-post-title-shadow: 0.5px 0.5px $gray-600;
-.k014-post-card {
-  a {
-    position: absolute;
-    z-index: 1;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-
-  .k014-post-card-image {
-    position: absolute;
-    z-index: -1;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background: no-repeat center center;
-    background-size: cover;
-    border-radius: $border-radius-xl;
-  }
-
-  .k014-post-card-image::after {
-    display: block;
-    width: 100%;
-    height: 100%;
-    content: '';
-    border-radius: $border-radius-xl;
-    background-image: linear-gradient(
-      to bottom,
-      rgba(245, 246, 252, 0.2),
-      rgba(117, 19, 93, 0.6)
-    );
-  }
-
-  h1 {
-    text-shadow: $k014-post-title-shadow;
-    margin-right: 20%;
-  }
-
-  span {
-    font-size: 1em;
-  }
-
-  padding: 2.5em;
-  position: relative;
-  height: 100%;
-  min-height: 300px;
-  transition: transform .3s ease;
-
-  &:hover {
-    transform: translateY(-3px);
-  }
-}
-
+$k014-header-height: 200px;
 .k014-header {
-  height: 200px;
+  height: $k014-header-height;
 
   img {
     max-width: 100%;
     max-height: 100%;
+  }
+}
+
+$k014-header-calculated-height: $k014-header-height;
+$k014-footer-calculated-height: 11.5em;
+$k014-post-title-shadow: 0.5px 0.5px $gray-600;
+.k014-container {
+  min-height: calc(100vh - #{$k014-header-calculated-height} - #{$k014-footer-calculated-height});
+
+  .k014-post-card {
+    a {
+      position: absolute;
+      z-index: 1;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .k014-post-card-image {
+      position: absolute;
+      z-index: -1;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background: no-repeat center center;
+      background-size: cover;
+      border-radius: $border-radius-xl;
+    }
+
+    .k014-post-card-image::after {
+      display: block;
+      width: 100%;
+      height: 100%;
+      content: '';
+      border-radius: $border-radius-xl;
+      background-image: linear-gradient(
+      to bottom,
+      rgba(245, 246, 252, 0.2),
+      rgba(117, 19, 93, 0.6)
+      );
+    }
+
+    h1 {
+      text-shadow: $k014-post-title-shadow;
+      margin-right: 20%;
+    }
+
+    span {
+      font-size: 1em;
+    }
+
+    padding: 2.5em;
+    position: relative;
+    height: 100%;
+    min-height: 300px;
+    transition: transform .3s ease;
+
+    &:hover {
+      transform: translateY(-3px);
+    }
   }
 }
 
