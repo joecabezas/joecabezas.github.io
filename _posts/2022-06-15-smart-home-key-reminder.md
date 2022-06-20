@@ -35,8 +35,8 @@ This means when not in use it shall use a very small ammount of energy or
 preferable no energy at all in order to make the battery to last more than a
 year.
 
-In order to achieve this my first guess was to use a feature of the ESP8266
-called "Deep-Sleep" which according to the power consumption by power modes
+In order to achieve this, my first guess was to use a feature of the ESP8266
+called "Deep-Sleep" which according to the power consumption by the power modes
 table in the datasheet is only 20uA when on Deep-Sleep.
 
 {%
@@ -50,7 +50,8 @@ wifi network, sends a message over MQTT to my local broker (running in a
 Raspberry Pi 4), and then it enters into Deep-Sleep until triggered again.
 
 But, how can I trigger a key holder?, my first guess was a mechanical solution
-in which activates a sort of a lever when the keys are hold like a limit switch
+in which activates a sort of a lever whenever the keys are placed like a limit
+switch
 
 {%
   include picture_with_note.html
@@ -58,15 +59,16 @@ in which activates a sort of a lever when the keys are hold like a limit switch
     alt="A limit switch"
 %}
 
-Then the keys when hold it will trigger the microprocessor and sends
-the message, or even a better idea, what if when the switch is closed it also
-closes the circuit giving it power, this way, when the keys are not present the
-circuit will not consume power, and then present it will give it power but it
-will be mostly on Deep-Sleep mode.
+When the keys are placed, it will trigger the microprocessor and sends the
+message.
 
-This solves 50% of the power issue, no energy consumption when not triggered
-and only 20uA when the keys are present, is there any way to only consume power
-when they keys are placed?, this is what I came up with:
+I have a better idea, what if the switch instead of giving a signal to the
+microprocessor it gives power to the microprocessor?, this way, when the keys
+are not present the circuit will not consume power, great.
+
+This solves 50% of the power issue, no energy consumption when the keys are not
+present and only 20uA when the keys are present, is there any way to only
+consume power when they keys are placed?, this is what I came up with:
 
 {%
   include picture_with_note.html
@@ -75,20 +77,21 @@ when they keys are placed?, this is what I came up with:
     class="w-75"
 %}
 
-The idea is to have a way to hold the keys and roll a wheel that presses a
-button when the keys are being placed and again when taking them out, this way
-it only consumes energy when changing state, perfect!
+The idea is to have a way to roll a wheel that presses a button when placing or
+taking out the keys, this way it only consumes energy when changing state,
+perfect!
 
 But there is an issue, the button press will be short lived and it wont give
-enough power to the ESP8266 to connect to the wifi and send a message,
-specially since just connecting to the wifi it can take about 5 seconds, back
-to the drawing board again...
+enough time (and power) to the ESP8266 to connect to the wifi and send a
+message, just connecting to the wifi it can take about 5 seconds, back to the
+drawing board again...
 
 At this point investigating, I saw this video from brilliant engineer [Andreas
 Spiess](https://www.youtube.com/c/AndreasSpiess) in which talks about a way to
 press a button and making the microprocessor to latch itself into the power
-circuit and auto disconnect when the task is done, this way, the button press
-(1) will power the ESP8266, then immediatelly the ESP8266 will will activate
+circuit and auto disconnect when the task is done.
+
+This way, the button press (1) will power the ESP8266, which it will activate
 the MOSFET (3) so energy can go from the battery (4) to the ESP (5), after
 that, the button can be relased and the ESP8266 will still have energy to do a
 longer task like connecting to wifi and send the message (image taken from
@@ -112,7 +115,7 @@ working prototype, here is a video of it working :blush:
 ![](https://youtu.be/L1iz5gWGAso)
 
 At the time I got this prototype working a bunch of sensors came by mail from
-Aliexpress, motion sensors, buttons, and door sensors all of them uses Zigbee
+Aliexpress, motion sensors, buttons, and door sensors, all of them uses Zigbee
 protocol for communication.
 
 {%
@@ -121,10 +124,11 @@ protocol for communication.
     alt="Sonoff sensors"
 %}
 
-Then it me, why not just grab a door sensor and adapt it to be my key holder
-and put the magnet in the keychain?, so I started modeling a 3d printed
-enclosure that hold the circuit and a small M3 nut which is ferromagnetic
-enough to attract a magnet attached to my key chain
+Then it me, why not just grab a door sensor and adapt it to be my key holder?
+
+I just need to put the magnet in the keychain, so I started modeling a 3d
+printed enclosure that hold the circuit with a small M3 nut which is
+ferromagnetic enough to attract a magnet attached to my key chain
 
 {% capture text %}
 {%
@@ -175,14 +179,15 @@ enough to attract a magnet attached to my key chain
 {% include row_of_items.html text=text %}
 
 And done!, now the sensor sends a message to the Raspberry Pi when closed
-(keys placed) and when open (keys taken) as if it was a door, then Red-Node
-grabs this information which is being used for automations
+(keys placed) and when open (keys taken) as if it was a door, sending the event
+to my instance of Red-Node.
 
 When the main door is opened, it checks if the keys are placed, if so, it tells
 my Google Home to say `"Don't forget your keys!"`, and if the keys are taken,
-meaning that I am outside it will say `"Welcome!"`, also, as an extra, I am
-playing a little notification sound whenever the keys are placed as a way to
-give me confitmation, I love how this sounds (check video at the beginning)
+it will say `"Welcome!"` (since we can infer that I am outside if keys are not
+placed), also, as an extra, I am playing a little notification sound whenever
+the keys are placed as a way to give me confitmation, I love how this sounds
+(check video at the beginning)
 
 Here is how the Node-Red flow looks like:
 
