@@ -4,9 +4,6 @@
 
 $css-root-vars: (
     color-font: #fff,
-    color-font-button: #0b0b0b,
-    color-alert-red: #f74856,
-    color-alert-orange: #ff970d,
     color-body: #222327,
     color-featured-label: #1a1a1a,
     color-featured-label-mobile: #222327,
@@ -25,8 +22,6 @@ $css-root-vars: (
     color-elements-one: #414242,
     color-elements-two: #717171,
     color-elements-white: #fff,
-    gradient-gray-start: #2b2d32,
-    gradient-gray-end: #32343a,
 );
 
 $body-bg: map-get($css-root-vars, color-body);
@@ -80,7 +75,7 @@ $k014-post-title-shadow: 0.5px 0.5px $gray-600;
   min-height: calc(100vh - #{$k014-header-calculated-height} - #{$k014-footer-calculated-height});
 
   .k014-post-card {
-    padding: 12%;
+    padding: 10%;
     position: relative;
     height: 100%;
     min-height: 300px;
@@ -139,6 +134,7 @@ $k014-post-title-shadow: 0.5px 0.5px $gray-600;
 
 $k014-post-content-width: 700px;
 $k014-post-content-padding: 6em;
+$k014-post-content-vertical-offset: -5vh;
 article {
   background-color: $body-bg;
   z-index: 0;
@@ -147,6 +143,7 @@ article {
   .k014-post-header {
     position: relative;
     z-index: -1;
+    height: 35vh;
 
     .k014-post-header-image {
       position: absolute;
@@ -154,6 +151,7 @@ article {
       height: 100%;
       background: no-repeat center center;
       background-size: cover;
+      z-index: -1;
 
       &::after {
         display: block;
@@ -174,12 +172,11 @@ article {
 
     .k014-post-header-headline {
       width: 50%;
+      height: calc(100% + #{$k014-post-content-vertical-offset});
       margin: auto;
-      min-height: 35vh;
 
       h1 {
         font-size: calc(2rem + 1.5vw) !important;
-        padding-top: 20px;
         text-shadow: $k014-post-title-shadow;
       }
 
@@ -188,7 +185,6 @@ article {
         width: 40%;
 
         h1 {
-          padding-top: 0.5em;
           text-shadow: $k014-post-title-shadow;
         }
       }
@@ -198,7 +194,7 @@ article {
   .k014-post-content {
     @include make-container();
     background-color: $body-bg;
-    margin-top: -5vh;
+    margin-top: $k014-post-content-vertical-offset;
     padding-top: calc(#{$k014-post-content-padding} - 4em);
     padding-left: calc(#{$k014-post-content-padding} - 4em);
     padding-right: calc(#{$k014-post-content-padding} - 4em);
@@ -206,7 +202,7 @@ article {
     border-radius: $border-radius-2xl;
 
     @media (min-width: 992px) {
-      margin-top: -7vh;
+      margin-top: $k014-post-content-vertical-offset;
       max-width: calc(#{$k014-post-content-width} + 2 * #{$k014-post-content-padding});
       padding-top: calc(#{$k014-post-content-padding} - 3em);
       padding-left: $k014-post-content-padding;
@@ -244,6 +240,14 @@ footer {
   li {
     width: $k014-footer-icon-size;
     height: $k014-footer-icon-size;
+  }
+}
+
+.k014-headline {
+  .k014-tag {
+    span {
+      background-color: $purple-600;
+    }
   }
 }
 

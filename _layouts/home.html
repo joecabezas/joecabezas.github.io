@@ -20,11 +20,14 @@ layout: default
         <a href="{{ post.url | relative_url }}">
         </a>
         <div class="k014-post-card-image" style="background-image: url({% picture index {{ post.image }} %})" />
-          <h1 class="card-title">{{ post.title | escape }}</h1>
-          {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
-          <div>
-            <span>{{ post.date | date: date_format }}</span>
-          </div>
+          {%
+          include
+          post_headline.html
+          title=post.title
+          date=post.date
+          tags=post.tags
+          first_only=true
+          %}
         </div>
       </div>
       {%- endfor -%}

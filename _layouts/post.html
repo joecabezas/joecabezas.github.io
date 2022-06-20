@@ -3,18 +3,15 @@ layout: default
 ---
 <article itemscope itemtype="http://schema.org/BlogPosting">
   <div class="k014-post-header start-0">
-    <div
-      class="k014-post-header-image"
-      style="background-image: url({% picture index {{ page.image }} %})"
-      ></div>
-    <div class="col k014-post-header-headline">
-      <h1 itemprop="name headline">{{ page.title | escape }}</h1>
-      <p>
-      <time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
-        {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
-        {{ page.date | date: date_format }}
-      </time>
-      </p>
+    <div class="k014-post-header-image" style="background-image: url({% picture index {{ page.image }} %})"></div>
+    <div class="col k014-post-header-headline pt-3 pb-4">
+      {%
+      include
+      post_headline.html
+      title=page.title
+      date=page.date
+      tags=page.tags
+      %}
     </div>
   </div>
 

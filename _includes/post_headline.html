@@ -1,0 +1,18 @@
+<div class="k014-headline d-flex flex-column h-100">
+  <h1 itemprop="name headline" class="my-0">{{ include.title | escape }}</h1>
+  <time datetime="{{ include.date | date_to_xmlschema }}" itemprop="datePublished">
+    {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
+    {{ include.date | date: date_format }}
+  </time>
+  {%- if include.tags -%}
+  <div class="k014-tag mt-auto d-flex flex-wrap">
+    {%- assign tags = include.tags -%}
+    {%- if include.first_only -%}
+    {%- assign tags = include.tags.first -%}
+    {%- endif -%}
+    {%- for tag in tags -%}
+    <span class="rounded-pill py-1 px-3 me-1 mb-1">{{ tag }}</span>
+    {%- endfor -%}
+  </div>
+  {%- endif -%}
+</div>
