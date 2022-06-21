@@ -58,13 +58,20 @@ a {
   }
 }
 
-$k014-header-height: 200px;
+$k014-header-height: 100px;
 .k014-header {
   height: $k014-header-height;
 
-  img {
-    max-width: 100%;
-    max-height: 100%;
+  .k014-header-logo {
+    img {
+      height: $k014-header-height;
+    }
+  }
+
+  .k014-header-language-toggle {
+    img {
+      width: 30px;
+    }
   }
 }
 
