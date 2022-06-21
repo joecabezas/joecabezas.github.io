@@ -13,7 +13,7 @@ Since I was working in my smart home, I thought it would be neat that the home
 warn you whenever I am about to exit without my keys, and a week on
 investigation started.
 
-Here is a video on how it works
+Here is a video on how it works:
 
 ![](https://youtu.be/D_sBs_NYOe8)
 

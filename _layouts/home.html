@@ -4,22 +4,14 @@ layout: default
 {{ content }}
 
 <div class="container k014-container">
-  <div
-    class="
-           row
-           my-3
-           justify-content-center
-           row-cols-1
-           row-cols-md-2
-           row-cols-lg-3
-           row-cols-xl-4
-           ">
+  <div class="row my-3 justify-content-center row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
     {%- for post in site.posts -%}
     <div class="col my-3">
       <div class="k014-post-card">
-        <a href="{{ post.url | relative_url }}">
-        </a>
-        <div class="k014-post-card-image" style="background-image: url({% picture index {{ post.image }} %})" />
+        <a href="{{ site.baseurl }}{{ post.url | relative_url }}"></a>
+        <div class="k014-post-card-image" style="background-image: url({% picture index {{ post.image }} %})">
+        </div>
+        <div class="k014-post-card-headline">
           {%
           include
           post_headline.html
@@ -30,6 +22,7 @@ layout: default
           %}
         </div>
       </div>
-      {%- endfor -%}
     </div>
+    {%- endfor -%}
   </div>
+</div>

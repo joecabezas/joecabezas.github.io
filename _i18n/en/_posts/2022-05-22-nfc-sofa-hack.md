@@ -4,7 +4,6 @@ title: NFC Sofa Hack
 tags: nfc home-automation node-red hack
 image: 2022/05/22/nfc-sofa-tag.png
 ---
-
 When I started playing with home automation I purchased this pack of
 [50 NFC215 Round Cards](https://www.amazon.com/dp/B08DD24Z5K) this are tags
 that can hold up to
@@ -21,13 +20,14 @@ a specific IP (my home automation server running on a Raspberry Pi 4), but it
 turns out that the standard for NFC actions that can be programmed is very
 limited to just open web links, create a new contact on a phone, or add new
 Wifi credentials.  in order make this there are software that allows you to
-program tons of actions like sending UDP packets, turn on bluetooth, etc. The
-only catch is that the reading phone needs to have installed the software that
-interprets the action, the good thing is that, the software
+program tons of actions like sending UDP packets, turn on bluetooth, turn on
+the phone's flashlight, etc. The only catch is that the reading phone needs to
+have installed the software that interprets the action, the good thing is that,
+the software
 [(NFC Tools Pro)](https://play.google.com/store/apps/details?id=com.wakdev.nfctools.prohttps://play.google.com/store/apps/details?id=com.wakdev.nfctools.pro)
 does this in a clever way, when adding a custom action it actually creates 2
 actions in the NFC tag: one to visit the link of the software google play page
-for download, and if the phone already have it, it will just execute the
+for download, and if the phone already have the app, it will just execute the
 action, so I am ok with this then.
 
 {%
@@ -57,5 +57,6 @@ Which takes the payload and filters the `id` (in the case of the sofa the id
 would be `living_room_nfc_tag_sofa_right_arm`) and assign an action, for now
 all the nfc tags that I have around are for toggling the living room lights
 group created on [Home Assistant](https://www.home-assistant.io/), but you can
-see how this can be used for other stuff like playing music, send an MQTT
+see how this can be used for other stuff like playing music, turn on the coffee
+machine, the air conditioner, drop more food to a pet bowl, send an MQTT
 message, or even triggering any linux command.

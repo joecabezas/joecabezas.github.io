@@ -19,6 +19,7 @@ group :jekyll_plugins do
 
   # custom
   gem 'jekyll-auto-image'
+  gem 'jekyll-multiple-languages-plugin'
   gem 'jekyll_picture_tag'
   gem 'jekyll-spaceship'
 end

@@ -34,6 +34,8 @@ GEM
       jekyll
     jekyll-feed (0.16.0)
       jekyll (>= 3.7, < 5.0)
+    jekyll-multiple-languages-plugin (1.8.0)
+      jekyll (>= 2.0, < 5.0)
     jekyll-sass-converter (2.2.0)
       sassc (> 2.0.1, < 3.0)
     jekyll-seo-tag (2.8.0)
@@ -100,6 +102,7 @@ DEPENDENCIES
   jekyll (~> 4.2.2)
   jekyll-auto-image
   jekyll-feed (~> 0.12)
+  jekyll-multiple-languages-plugin
   jekyll-spaceship
   jekyll_picture_tag
   minima (~> 2.5)

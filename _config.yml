@@ -34,12 +34,13 @@ rss: rss
 # Build settings
 theme: minima
 
-minima:
-  skin: dark
-
 plugins:
   - jekyll-feed
   - jekyll-spaceship
+  - jekyll-multiple-languages-plugin
+
+languages: ["en", "es"]
+exclude_from_localizations: ["assets", "CNAME"]
 
 # Exclude from processing.
 # The following items will not be processed, by default.
@@ -65,3 +66,4 @@ picture:
   source: "assets/images/fullsize"
   output: "assets/images/generated"
   nomarkdown: false
+  baseurl_key: baseurl_root
