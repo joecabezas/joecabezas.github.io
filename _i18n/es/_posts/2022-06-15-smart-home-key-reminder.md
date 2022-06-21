@@ -36,7 +36,7 @@ energía o, preferiblemente, nada de energía para que la batería asi dure más
 un año.
 
 Para lograr esto, mi primera suposición fue usar una función del ESP8266
-llamada *"Deep-Sleep"* ("Sueño profundo") que, de acuerdo con la table de
+llamada *"Deep-Sleep"* ("Sueño profundo") que, de acuerdo con la tabla de
 consumo de energía en la hoja de datos, es solo 20 uA cuando está en
 *Deep-Sleep*
 
@@ -52,7 +52,7 @@ Raspberry Pi 4) y luego entra en *Deep-Sleep* hasta que se active nuevamente.
 
 Pero, ¿cómo puedo activar un colgador de llaves? Mi primera suposición fue una
 solución mecánica en la que se activa una especie de palanca cada vez que las
-llaves se colocan como un interruptor de límite.
+llaves se cuelgan como un interruptor de límite.
 
 {%
   include picture_with_note.html
@@ -60,7 +60,7 @@ llaves se colocan como un interruptor de límite.
     alt="Un interruptor de límite"
 %}
 
-Asi, cuando se colocan las llaves, activará el microprocesador y enviará el
+Asi, cuando se cuelgan las llaves, activará el microprocesador y enviará el
 mensaje.
 
 Tengo una idea mejor, ¿y si el interruptor en lugar de dar una señal al
@@ -69,7 +69,9 @@ llaves no están presentes el circuito no consumirá energía, genial.
 
 Esto resuelve el 50% del problema de energía, no hay consumo de energía cuando
 las llaves no están presentes y solo 20uA cuando las llaves están presentes,
-¿hay alguna forma de consumir energía solo cuando las teclas están colocadas?
+¿hay alguna forma de consumir energía solo cuando las teclas están siendo
+colgadas?
+
 Esto es lo que se me ocurrió:
 
 {%
@@ -80,7 +82,7 @@ Esto es lo que se me ocurrió:
 %}
 
 La idea es tener una forma de hacer rodar una rueda que presione un botón al
-colocar o sacar las llaves, de esta manera solo consume energía al cambiar de
+colgar o sacar las llaves, de esta manera solo consume energía al cambiar de
 estado, ¡perfecto!
 
 Pero hay un problema, la pulsación del botón será de corta duración y no le
@@ -88,10 +90,11 @@ dará suficiente tiempo (y energía) al ESP8266 para conectarse al wifi y enviar
 el  mensaje, ya que solo conectarse al wifi puede demorar unos 5 segundos, de
 vuelta al pizarron...
 
-En este punto de investigación, vi este video del brillante ingeniero [Andreas
-Spiess](https://www.youtube.com/c/AndreasSpiess) en el que habla sobre una
-forma de presionar un botón y hacer que el microprocesador se enganche en el
-circuito de alimentación y se desconecte automáticamente cuando termina la tarea.
+En este punto de la investigación, vi este video del brillante ingeniero
+[Andreas Spiess](https://www.youtube.com/c/AndreasSpiess) en el que habla sobre
+una forma de presionar un botón y hacer que el microprocesador se enganche en
+el circuito de alimentación y se desconecte automáticamente cuando termina la
+tarea.
 
 De esta forma, la pulsación del botón (1) alimentará el ESP8266, el cual
 activará el MOSFET (3) para que la energía pase de la batería (4) al ESP (5),
@@ -110,7 +113,7 @@ Aquí está el video de esta idea siendo explicada:
 
 ![](https://youtu.be/nbMfb0dIvYc)
 
-¡Esta es una solución muy inteligente! Así que agarré un chip ESP01 que *no*
+¡Esta es una solución muy inteligente! Así que tomé un chip ESP01 que *no*
 estaba haciendo nada y programé un programa rápido para enviar un mensaje MQTT
 y pude construir un prototipo funcional, aquí hay un video de cómo funciona
 :blush:
@@ -127,10 +130,10 @@ de puerta, todos ellos usan el protocolo Zigbee para la comunicación.
     alt="Sensores Sonoff"
 %}
 
-Entonces tuve una idea: ¿por qué no agarrar un sensor de puerta y adaptarlo
+Entonces tuve una idea: ¿por qué no tomar un sensor de puerta y adaptarlo
 para que sea mi colgador de llaves?
 
-Solo necesito colocar un imán en el llavero, así que comencé a modelar una
+Solo necesito poner un imán en el llavero, así que comencé a modelar una
 carcasa impresa en 3D que sostiene el circuito con una pequeña tuerca M3 que es
 lo suficientemente ferromagnética para atraer un imán adherido a mi llavero.
 
@@ -183,14 +186,14 @@ lo suficientemente ferromagnética para atraer un imán adherido a mi llavero.
 {% include row_of_items.html text=text %}
 
 ¡Y listo!, ahora el sensor envía un mensaje a la Raspberry Pi cuando está
-cerrada (llaves colocadas) y cuando está abierta (llaves tomadas) como si fuera
+cerrada (llaves puestas) y cuando está abierta (llaves tomadas) como si fuera
 una puerta, enviando el evento a mi instancia de Red-Node.
 
-Cuando se abre la puerta principal, verifica si las llaves están colocadas, si
+Cuando se abre la puerta principal, verifica si las llaves están colgadas, si
 es así, le dice a mi Google Home que diga `"¡No olvides tus llaves!"`, y si se
 toman las llaves, dirá `"¡Bienvenido!"` (ya que podemos inferir que estoy afuera
 si las llaves no estan puestas), también, como extra, estoy reproduciendo un
-pequeño sonido de notificación cada vez que se colocan las llaves como una
+pequeño sonido de notificación cada vez que se cuelgan las llaves como una
 forma de confirmarme, me encanta cómo suena (ver video al principio)
 
 Así es como se ve el flujo de Node-Red:
