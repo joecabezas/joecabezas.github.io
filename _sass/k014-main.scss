@@ -2,45 +2,10 @@
 @import "../node_modules/bootstrap/scss/variables";
 @import "../node_modules/bootstrap/scss/mixins";
 
-$css-root-vars: (
-    color-font: #fff,
-    color-body: #222327,
-    color-featured-label: #1a1a1a,
-    color-featured-label-mobile: #222327,
-    color-search-icon: #717171,
-    color-underline-link: #414242,
-    color-table-border: #414242,
-    color-figcaption: #c3c6c7,
-    color-hover-dot: #717171,
-    color-bg-textarea: #28292e,
-    color-bg-code: #32343a,
-    color-bg-tag: #414242,
-    color-bg-featured-label: #fff,
-    color-bg-featured-label-mobile: #f4f4f4,
-    color-bg-elements: #28292e,
-    color-bg-button-membership: #e2e5ed,
-    color-elements-one: #414242,
-    color-elements-two: #717171,
-    color-elements-white: #fff,
-);
-
-$body-bg: map-get($css-root-vars, color-body);
-$body-color: map-get($css-root-vars, color-font);
+$body-bg: #222327;
+$body-color: #fff;
 $link-color: #f8f9fa;
-
-a {
-  color: var(--#{$prefix}link-color);
-  text-decoration: $link-decoration;
-
-  &:hover {
-    color: #f9fafb !important;
-    text-decoration: $link-hover-decoration;
-  }
-
-  &:visited {
-    color: #f9fafb !important;
-  }
-}
+$font-size-base: 1.25em;
 
 .k014-title {
   font-size: 44px;
@@ -283,18 +248,10 @@ footer {
   }
 }
 
-.k014-headline {
-  .k014-tag {
-    span {
-      background-color: $purple-600;
-    }
+.k014-tags {
+  span {
+    background-color: $purple-600;
   }
 }
 
 @import "../node_modules/bootstrap/scss/bootstrap";
-
-p img,iframe {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}

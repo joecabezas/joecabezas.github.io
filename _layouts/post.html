@@ -5,17 +5,34 @@ layout: default
   <div class="k014-post-header start-0">
     <div class="k014-post-header-image" style="background-image: url({% picture index {{ page.image }} %})"></div>
     <div class="col k014-post-header-headline pt-3 pb-4">
-      {%
-      include
-      post_headline.html
-      title=page.title
-      date=page.date
-      tags=page.tags
-      %}
+      <div class="d-sm-none h-100">
+        {%
+        include
+        post_headline.html
+        title=page.title
+        date=page.date
+        %}
+      </div>
+      <div class="d-none d-sm-block">
+        {%
+        include
+        post_headline.html
+        title=page.title
+        date=page.date
+        tags=page.tags
+        %}
+      </div>
     </div>
   </div>
 
   <div class="k014-post-content">
+    <div class="d-sm-none mb-3">
+      {%
+      include
+      tags.html
+      tags=page.tags
+      %}
+    </div>
     {{ content }}
 
     <script src="https://giscus.app/client.js"

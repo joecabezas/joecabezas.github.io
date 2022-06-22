@@ -1,0 +1,9 @@
+<div class="k014-tags mt-auto d-flex flex-wrap">
+  {%- assign tags = include.tags -%}
+  {%- if include.first_only -%}
+  {%- assign tags = include.tags.first -%}
+  {%- endif -%}
+  {%- for tag in tags -%}
+  <span class="rounded-pill py-1 px-3 me-1 mb-1">{{ tag }}</span>
+  {%- endfor -%}
+</div>
