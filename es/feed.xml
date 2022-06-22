@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="es"><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="https://blog.k014.net/feed.xml" rel="self" type="application/atom+xml" /><link href="https://blog.k014.net/" rel="alternate" type="text/html" hreflang="es" /><updated>2022-06-22T20:24:46+00:00</updated><id>https://blog.k014.net/feed.xml</id><title type="html">k014’s Blog</title><subtitle>I use this space as a way to document what I am currently studying and projects I am working on, I hope you find something useful around</subtitle><entry><title type="html">Recordatorio de llaves para Smart Home</title><link href="https://blog.k014.net/2022/06/15/smart-home-key-reminder.html" rel="alternate" type="text/html" title="Recordatorio de llaves para Smart Home" /><published>2022-06-15T00:00:00+00:00</published><updated>2022-06-15T00:00:00+00:00</updated><id>https://blog.k014.net/2022/06/15/smart-home-key-reminder</id><content type="html" xml:base="https://blog.k014.net/2022/06/15/smart-home-key-reminder.html"><![CDATA[<p>Hace poco me quedé fuera del apartamento, afortunadamente era horario normal y
+pude pedirle al conserje que me abriera la puerta, si esto sucede después de
+las 10:00 p. m., según las políticas recientes, me cobrarían 100 USD en multas.</p>
+
+<p>Como estaba trabajando en mi <em>smart home</em>, pensé que sería buena idea  que la
+casa me advirtiera cada vez que estoy a punto de salir sin mis llaves, y asi
+comenzó una semana de investigación.</p>
+
+<p>aqui un video de como funciona:</p>
+
+<p><img src="https://youtu.be/D_sBs_NYOe8" alt="" /></p>
+
+<p>La investigación comenzó en primer lugar fijando objetivos, el colgador de
+llaves que informa al <em>smart home</em> si las llaves están presentes deberá:</p>
+
+<ul>
+  <li>Funcionar con pilas</li>
+  <li>La batería debe durar más de un año.</li>
+  <li>Debe envíar un mensaje por Zigbee (preferido) o MQTT (vía wifi)</li>
+  <li>En reposo, NO consumirá energía (preferido) o poca energía (&lt;20
+microamperios)</li>
+</ul>
+
+<p>Como ya tengo experiencia en la construcción de proyectos con el
+microprocesador ESP8266, opté por este microprocesador, la única diferencia
+esta vez es que necesita consumir la menor cantidad de energía posible ya que
+funcionará con una batería pequeña como una CR2032 que tiene una capacidad de
+alrededor 220 mAh.</p>
+
+<p>Esto significa que cuando no esté en uso, utilizará una cantidad muy pequeña de
+energía o, preferiblemente, nada de energía para que la batería asi dure más de
+un año.</p>
+
+<p>Para lograr esto, mi primera suposición fue usar una función del ESP8266
+llamada <em>“Deep-Sleep”</em> (“Sueño profundo”) que, de acuerdo con la tabla de
+consumo de energía en la hoja de datos, es solo 20 uA cuando está en
+<em>Deep-Sleep</em></p>
+
+<figure class="
+  figure
+  mx-auto
+  d-block
+  
+  ">
+<a href="/assets/images/fullsize/2022/06/15/power-consumption-table.png">
+  <img class="shadow-sm border p-2 figure-img img-fluid rounded" src="/assets/images/generated/2022/06/15/power-consumption-table-800-479b34529.png" alt="Consumo de energia en distintos modos" srcset="/assets/images/generated/2022/06/15/power-consumption-table-400-479b34529.png 400w, /assets/images/generated/2022/06/15/power-consumption-table-600-479b34529.png 600w, /assets/images/generated/2022/06/15/power-consumption-table-800-479b34529.png 800w, /assets/images/generated/2022/06/15/power-consumption-table-843-479b34529.png 843w" />
+</a>
+
+  <figcaption class="figure-caption text-end">Consumo de energia en distintos modos</figcaption>
+</figure>
+
+<p>Esto es muy simple de hacer, el ESP8266 solo necesita conectarse a la red wifi,
+envíar un mensaje a través de MQTT a mi servidor local (que se ejecuta en una
+Raspberry Pi 4) y luego entra en <em>Deep-Sleep</em> hasta que se active nuevamente.</p>
+
+<p>Pero, ¿cómo puedo activar un colgador de llaves? Mi primera suposición fue una
+solución mecánica en la que se activa una especie de palanca cada vez que las
+llaves se cuelgan como un interruptor de límite.</p>
+
+<figure class="
+  figure
+  mx-auto
+  d-block
+  
+  ">
+<a href="/assets/images/fullsize/2022/06/15/end-stop-switch.png">
+  <img class="shadow-sm border p-2 figure-img img-fluid rounded" src="/assets/images/generated/2022/06/15/end-stop-switch-775-f320e4382.png" alt="Un interruptor de límite" srcset="/assets/images/generated/2022/06/15/end-stop-switch-400-f320e4382.png 400w, /assets/images/generated/2022/06/15/end-stop-switch-600-f320e4382.png 600w, /assets/images/generated/2022/06/15/end-stop-switch-775-f320e4382.png 775w" />
+</a>
+
+  <figcaption class="figure-caption text-end">Un interruptor de límite</figcaption>
+</figure>
+
+<p>Asi, cuando se cuelgan las llaves, activará el microprocesador y enviará el
+mensaje.</p>
+
+<p>Tengo una idea mejor, ¿y si el interruptor en lugar de dar una señal al
+microprocesador le da energía al microprocesador?, de esta manera cuando las
+llaves no están presentes el circuito no consumirá energía, genial.</p>
+
+<p>Esto resuelve el 50% del problema de energía, no hay consumo de energía cuando
+las llaves no están presentes y solo 20uA cuando las llaves están presentes,
+¿hay alguna forma de consumir energía solo cuando las teclas están siendo
+colgadas?</p>
+
+<p>Esto es lo que se me ocurrió:</p>
+
+<figure class="
+  figure
+  mx-auto
+  d-block
+  w-75
+  ">
+<a href="/assets/images/fullsize/2022/06/15/mechanical-pulse-drawing.png">
+  <img class="shadow-sm border p-2 figure-img img-fluid rounded" src="/assets/images/generated/2022/06/15/mechanical-pulse-drawing-568-bee83727a.png" alt="Diagrama mecanico para un boton de pulso" srcset="/assets/images/generated/2022/06/15/mechanical-pulse-drawing-400-bee83727a.png 400w, /assets/images/generated/2022/06/15/mechanical-pulse-drawing-568-bee83727a.png 568w" />
+</a>
+
+  <figcaption class="figure-caption text-end">Diagrama mecanico para un boton de pulso</figcaption>
+</figure>
+
+<p>La idea es tener una forma de hacer rodar una rueda que presione un botón al
+colgar o sacar las llaves, de esta manera solo consume energía al cambiar de
+estado, ¡perfecto!</p>
+
+<p>Pero hay un problema, la pulsación del botón será de corta duración y no le
+dará suficiente tiempo (y energía) al ESP8266 para conectarse al wifi y enviar
+el  mensaje, ya que solo conectarse al wifi puede demorar unos 5 segundos, de
+vuelta al pizarron…</p>
+
+<p>En este punto de la investigación, vi este video del brillante ingeniero
+<a href="https://www.youtube.com/c/AndreasSpiess">Andreas Spiess</a> en el que habla sobre
+una forma de presionar un botón y hacer que el microprocesador se enganche en
+el circuito de alimentación y se desconecte automáticamente cuando termina la
+tarea.</p>
+
+<p>De esta forma, la pulsación del botón (1) alimentará el ESP8266, el cual
+activará el MOSFET (3) para que la energía pase de la batería (4) al ESP (5),
+luego se podrá soltar el botón y el ESP8266 todavía tendrá energía para hacer
+una tarea más larga como conectarse a wifi y enviar el mensaje (imagen tomada
+del video de Andreas).</p>
+
+<figure class="
+  figure
+  mx-auto
+  d-block
+  w-75
+  ">
+<a href="/assets/images/fullsize/2022/06/15/mosfet-diagram.png">
+  <img class="shadow-sm border p-2 figure-img img-fluid rounded" src="/assets/images/generated/2022/06/15/mosfet-diagram-800-95098ae1d.png" alt="Circuito con el MOSFET" srcset="/assets/images/generated/2022/06/15/mosfet-diagram-400-95098ae1d.png 400w, /assets/images/generated/2022/06/15/mosfet-diagram-600-95098ae1d.png 600w, /assets/images/generated/2022/06/15/mosfet-diagram-800-95098ae1d.png 800w, /assets/images/generated/2022/06/15/mosfet-diagram-864-95098ae1d.png 864w" />
+</a>
+
+  <figcaption class="figure-caption text-end">Circuito con el MOSFET</figcaption>
+</figure>
+
+<p>Aquí está el video de esta idea siendo explicada:</p>
+
+<p><img src="https://youtu.be/nbMfb0dIvYc" alt="" /></p>
+
+<p>¡Esta es una solución muy inteligente! Así que tomé un chip ESP01 que <em>no</em>
+estaba haciendo nada y programé un programa rápido para enviar un mensaje MQTT
+y pude construir un prototipo funcional, aquí hay un video de cómo funciona
+:blush:</p>
+
+<p><img src="https://youtu.be/L1iz5gWGAso" alt="" /></p>
+
+<p>En el momento en que hice funcionar este prototipo, un montón de sensores
+llegaron por correo de Aliexpress, sensores de movimiento, botones y sensores
+de puerta, todos ellos usan el protocolo Zigbee para la comunicación.</p>
+
+<figure class="
+  figure
+  mx-auto
+  d-block
+  
+  ">
+<a href="/assets/images/fullsize/2022/06/15/sonoff-sensors.png">
+  <img class="shadow-sm border p-2 figure-img img-fluid rounded" src="/assets/images/generated/2022/06/15/sonoff-sensors-800-59c1cad21.png" alt="Sensores Sonoff" srcset="/assets/images/generated/2022/06/15/sonoff-sensors-400-59c1cad21.png 400w, /assets/images/generated/2022/06/15/sonoff-sensors-600-59c1cad21.png 600w, /assets/images/generated/2022/06/15/sonoff-sensors-800-59c1cad21.png 800w, /assets/images/generated/2022/06/15/sonoff-sensors-1000-59c1cad21.png 1000w" />
+</a>
+
+  <figcaption class="figure-caption text-end">Sensores Sonoff</figcaption>
+</figure>
+
+<p>Entonces tuve una idea: ¿por qué no tomar un sensor de puerta y adaptarlo
+para que sea mi colgador de llaves?</p>
+
+<p>Solo necesito poner un imán en el llavero, así que comencé a modelar una
+carcasa impresa en 3D que sostiene el circuito con una pequeña tuerca M3 que es
+lo suficientemente ferromagnética para atraer un imán adherido a mi llavero.</p>
+
+<div class="container">
+  <div class="row">
+    
+    <div class="col">
+      <figure class="
+  figure
+  mx-auto
+  d-block
+  
+  ">
+<a href="/assets/images/fullsize/2022/06/15/sonoff-circuit.png">
+  <img class="shadow-sm border p-2 figure-img img-fluid rounded" src="/assets/images/generated/2022/06/15/sonoff-circuit-468-aa5c57b81.png" alt="Circuito Sonoff" srcset="/assets/images/generated/2022/06/15/sonoff-circuit-400-aa5c57b81.png 400w, /assets/images/generated/2022/06/15/sonoff-circuit-468-aa5c57b81.png 468w" />
+</a>
+
+  <figcaption class="figure-caption text-end">Circuito Sonoff</figcaption>
+</figure>
+
+
+    </div>
+    
+    <div class="col">
+      
+<figure class="
+  figure
+  mx-auto
+  d-block
+  
+  ">
+<a href="/assets/images/fullsize/2022/06/15/printing-enclosure.png">
+  <img class="shadow-sm border p-2 figure-img img-fluid rounded" src="/assets/images/generated/2022/06/15/printing-enclosure-733-4b6f4f702.png" alt="Imprimiendo la carcasa" srcset="/assets/images/generated/2022/06/15/printing-enclosure-400-4b6f4f702.png 400w, /assets/images/generated/2022/06/15/printing-enclosure-600-4b6f4f702.png 600w, /assets/images/generated/2022/06/15/printing-enclosure-733-4b6f4f702.png 733w" />
+</a>
+
+  <figcaption class="figure-caption text-end">Imprimiendo la carcasa</figcaption>
+</figure>
+
+
+    </div>
+    
+    <div class="col">
+      
+<figure class="
+  figure
+  mx-auto
+  d-block
+  
+  ">
+<a href="/assets/images/fullsize/2022/06/15/enclosure-nut.png">
+  <img class="shadow-sm border p-2 figure-img img-fluid rounded" src="/assets/images/generated/2022/06/15/enclosure-nut-554-17c8c3f32.png" alt="Una tuerca M3 es puesta para el iman de mi llavero" srcset="/assets/images/generated/2022/06/15/enclosure-nut-400-17c8c3f32.png 400w, /assets/images/generated/2022/06/15/enclosure-nut-554-17c8c3f32.png 554w" />
+</a>
+
+  <figcaption class="figure-caption text-end">Una tuerca M3 es puesta para el iman de mi llavero</figcaption>
+</figure>
+    </div>
+    
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    
+    <div class="col">
+      <figure class="
+  figure
+  mx-auto
+  d-block
+  
+  ">
+<a href="/assets/images/fullsize/2022/06/15/enclosure-with-circuit.png">
+  <img class="shadow-sm border p-2 figure-img img-fluid rounded" src="/assets/images/generated/2022/06/15/enclosure-with-circuit-800-3f476af4f.png" alt="El circuito dentro de la carcasa" srcset="/assets/images/generated/2022/06/15/enclosure-with-circuit-400-3f476af4f.png 400w, /assets/images/generated/2022/06/15/enclosure-with-circuit-600-3f476af4f.png 600w, /assets/images/generated/2022/06/15/enclosure-with-circuit-800-3f476af4f.png 800w, /assets/images/generated/2022/06/15/enclosure-with-circuit-1000-3f476af4f.png 1000w" />
+</a>
+
+  <figcaption class="figure-caption text-end">El circuito dentro de la carcasa</figcaption>
+</figure>
+
+
+    </div>
+    
+    <div class="col">
+      
+<figure class="
+  figure
+  mx-auto
+  d-block
+  
+  ">
+<a href="/assets/images/fullsize/2022/06/15/magnet-in-keychain.png">
+  <img class="shadow-sm border p-2 figure-img img-fluid rounded" src="/assets/images/generated/2022/06/15/magnet-in-keychain-800-4afc11917.png" alt="Un iman puesto en el llavero" srcset="/assets/images/generated/2022/06/15/magnet-in-keychain-400-4afc11917.png 400w, /assets/images/generated/2022/06/15/magnet-in-keychain-600-4afc11917.png 600w, /assets/images/generated/2022/06/15/magnet-in-keychain-800-4afc11917.png 800w, /assets/images/generated/2022/06/15/magnet-in-keychain-1000-4afc11917.png 1000w" />
+</a>
+
+  <figcaption class="figure-caption text-end">Un iman puesto en el llavero</figcaption>
+</figure>
+
+
+    </div>
+    
+    <div class="col">
+      
+<figure class="
+  figure
+  mx-auto
+  d-block
+  
+  ">
+<a href="/assets/images/fullsize/2022/06/15/keys-placed.png">
+  <img class="shadow-sm border p-2 figure-img img-fluid rounded" src="/assets/images/generated/2022/06/15/keys-placed-800-f86d04626.png" alt="Llaves puestas y detectadas" srcset="/assets/images/generated/2022/06/15/keys-placed-400-f86d04626.png 400w, /assets/images/generated/2022/06/15/keys-placed-600-f86d04626.png 600w, /assets/images/generated/2022/06/15/keys-placed-800-f86d04626.png 800w, /assets/images/generated/2022/06/15/keys-placed-1000-f86d04626.png 1000w" />
+</a>
+
+  <figcaption class="figure-caption text-end">Llaves puestas y detectadas</figcaption>
+</figure>
+    </div>
+    
+  </div>
+</div>
+
+<p>¡Y listo!, ahora el sensor envía un mensaje a la Raspberry Pi cuando está
+cerrada (llaves puestas) y cuando está abierta (llaves tomadas) como si fuera
+una puerta, enviando el evento a mi instancia de Red-Node.</p>
+
+<p>Cuando se abre la puerta principal, verifica si las llaves están colgadas, si
+es así, le dice a mi Google Home que diga <code class="language-plaintext highlighter-rouge">"¡No olvides tus llaves!"</code>, y si se
+toman las llaves, dirá <code class="language-plaintext highlighter-rouge">"¡Bienvenido!"</code> (ya que podemos inferir que estoy afuera
+si las llaves no estan puestas), también, como extra, estoy reproduciendo un
+pequeño sonido de notificación cada vez que se cuelgan las llaves como una
+forma de confirmarme, me encanta cómo suena (ver video al principio)</p>
+
+<p>Así es como se ve el flujo de Node-Red:</p>
+
+<figure class="
+  figure
+  mx-auto
+  d-block
+  
+  ">
+<a href="/assets/images/fullsize/2022/06/15/node-red-flow.png">
+  <img class="shadow-sm border p-2 figure-img img-fluid rounded" src="/assets/images/generated/2022/06/15/node-red-flow-800-32f25c82f.png" alt="Flujo de Node-Red para la automatizacion de recordatorio de las llaves" srcset="/assets/images/generated/2022/06/15/node-red-flow-400-32f25c82f.png 400w, /assets/images/generated/2022/06/15/node-red-flow-600-32f25c82f.png 600w, /assets/images/generated/2022/06/15/node-red-flow-800-32f25c82f.png 800w, /assets/images/generated/2022/06/15/node-red-flow-1000-32f25c82f.png 1000w" />
+</a>
+
+  <figcaption class="figure-caption text-end">Flujo de Node-Red para la automatizacion de recordatorio de las
+    llaves</figcaption>
+</figure>
+
+<p>Y aquí está la exportación JSON para que puedas importarla en tu instancia de
+Node-Red</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[{</span><span class="nl">"id"</span><span class="p">:</span><span class="s2">"099487586f45f55c"</span><span class="p">,</span><span class="nl">"type"</span><span class="p">:</span><span class="s2">"mqtt in"</span><span class="p">,</span><span class="nl">"z"</span><span class="p">:</span><span class="s2">"fec4b49ba92fcb02"</span><span class="p">,</span><span class="nl">"name"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="nl">"topic"</span><span class="p">:</span><span class="s2">"zigbee2mqtt/main_door_contact_sensor"</span><span class="p">,</span><span class="nl">"qos"</span><span class="p">:</span><span class="s2">"2"</span><span class="p">,</span><span class="nl">"datatype"</span><span class="p">:</span><span class="s2">"json"</span><span class="p">,</span><span class="nl">"broker"</span><span class="p">:</span><span class="s2">"d038737d9ec4f893"</span><span class="p">,</span><span class="nl">"nl"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="nl">"rap"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span><span class="nl">"rh"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="nl">"inputs"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="nl">"x"</span><span class="p">:</span><span class="mi">190</span><span class="p">,</span><span class="nl">"y"</span><span class="p">:</span><span class="mi">1360</span><span class="p">,</span><span class="nl">"wires"</span><span class="p">:[[</span><span class="s2">"75fa75f9290d2321"</span><span class="p">,</span><span class="s2">"80b2102ecaacff89"</span><span class="p">]]},{</span><span class="nl">"id"</span><span class="p">:</span><span class="s2">"75fa75f9290d2321"</span><span class="p">,</span><span class="nl">"type"</span><span class="p">:</span><span class="s2">"switch"</span><span class="p">,</span><span class="nl">"z"</span><span class="p">:</span><span class="s2">"fec4b49ba92fcb02"</span><span class="p">,</span><span class="nl">"name"</span><span class="p">:</span><span class="s2">"contact is false"</span><span class="p">,</span><span class="nl">"property"</span><span class="p">:</span><span class="s2">"payload.contact"</span><span class="p">,</span><span class="nl">"propertyType"</span><span class="p">:</span><span class="s2">"msg"</span><span class="p">,</span><span class="nl">"rules"</span><span class="p">:[{</span><span class="nl">"t"</span><span class="p">:</span><span class="s2">"false"</span><span class="p">}],</span><span class="nl">"checkall"</span><span class="p">:</span><span class="s2">"true"</span><span class="p">,</span><span class="nl">"repair"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="nl">"outputs"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="nl">"x"</span><span class="p">:</span><span class="mi">500</span><span class="p">,</span><span class="nl">"y"</span><span class="p">:</span><span class="mi">1400</span><span class="p">,</span><span class="nl">"wires"</span><span class="p">:[[</span><span class="s2">"96c415c7e6adc921"</span><span class="p">]]},{</span><span class="nl">"id"</span><span class="p">:</span><span class="s2">"80b2102ecaacff89"</span><span class="p">,</span><span class="nl">"type"</span><span class="p">:</span><span class="s2">"switch"</span><span class="p">,</span><span class="nl">"z"</span><span class="p">:</span><span class="s2">"fec4b49ba92fcb02"</span><span class="p">,</span><span class="nl">"name"</span><span class="p">:</span><span class="s2">"contact is true"</span><span class="p">,</span><span class="nl">"property"</span><span class="p">:</span><span class="s2">"payload.contact"</span><span class="p">,</span><span class="nl">"propertyType"</span><span class="p">:</span><span class="s2">"msg"</span><span class="p">,</span><span class="nl">"rules"</span><span class="p">:[{</span><span class="nl">"t"</span><span class="p">:</span><span class="s2">"true"</span><span class="p">}],</span><span class="nl">"checkall"</span><span class="p">:</span><span class="s2">"true"</span><span class="p">,</span><span class="nl">"repair"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="nl">"outputs"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="nl">"x"</span><span class="p">:</span><span class="mi">500</span><span class="p">,</span><span class="nl">"y"</span><span class="p">:</span><span class="mi">1360</span><span class="p">,</span><span class="nl">"wires"</span><span class="p">:[[]]},{</span><span class="nl">"id"</span><span class="p">:</span><span class="s2">"96c415c7e6adc921"</span><span class="p">,</span><span class="nl">"type"</span><span class="p">:</span><span class="s2">"api-current-state"</span><span class="p">,</span><span class="nl">"z"</span><span class="p">:</span><span class="s2">"fec4b49ba92fcb02"</span><span class="p">,</span><span class="nl">"name"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="nl">"server"</span><span class="p">:</span><span class="s2">"a7e32585d87233f4"</span><span class="p">,</span><span class="nl">"version"</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span><span class="nl">"outputs"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="nl">"halt_if"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="nl">"halt_if_type"</span><span class="p">:</span><span class="s2">"str"</span><span class="p">,</span><span class="nl">"halt_if_compare"</span><span class="p">:</span><span class="s2">"is"</span><span class="p">,</span><span class="nl">"entity_id"</span><span class="p">:</span><span class="s2">"binary_sensor.main_door_contact_sensor_key_holder_contact"</span><span class="p">,</span><span class="nl">"state_type"</span><span class="p">:</span><span class="s2">"str"</span><span class="p">,</span><span class="nl">"blockInputOverrides"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span><span class="nl">"outputProperties"</span><span class="p">:[{</span><span class="nl">"property"</span><span class="p">:</span><span class="s2">"payload"</span><span class="p">,</span><span class="nl">"propertyType"</span><span class="p">:</span><span class="s2">"msg"</span><span class="p">,</span><span class="nl">"value"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="nl">"valueType"</span><span class="p">:</span><span class="s2">"entityState"</span><span class="p">},{</span><span class="nl">"property"</span><span class="p">:</span><span class="s2">"data"</span><span class="p">,</span><span class="nl">"propertyType"</span><span class="p">:</span><span class="s2">"msg"</span><span class="p">,</span><span class="nl">"value"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="nl">"valueType"</span><span class="p">:</span><span class="s2">"entity"</span><span class="p">}],</span><span class="nl">"for"</span><span class="p">:</span><span class="s2">"0"</span><span class="p">,</span><span class="nl">"forType"</span><span class="p">:</span><span class="s2">"num"</span><span class="p">,</span><span class="nl">"forUnits"</span><span class="p">:</span><span class="s2">"minutes"</span><span class="p">,</span><span class="nl">"override_topic"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="nl">"state_location"</span><span class="p">:</span><span class="s2">"payload"</span><span class="p">,</span><span class="nl">"override_payload"</span><span class="p">:</span><span class="s2">"msg"</span><span class="p">,</span><span class="nl">"entity_location"</span><span class="p">:</span><span class="s2">"data"</span><span class="p">,</span><span class="nl">"override_data"</span><span class="p">:</span><span class="s2">"msg"</span><span class="p">,</span><span class="nl">"x"</span><span class="p">:</span><span class="mi">870</span><span class="p">,</span><span class="nl">"y"</span><span class="p">:</span><span class="mi">1400</span><span class="p">,</span><span class="nl">"wires"</span><span class="p">:[[</span><span class="s2">"7a88cbe45a8a0840"</span><span class="p">,</span><span class="s2">"e1b158241ac56f2d"</span><span class="p">]]},{</span><span class="nl">"id"</span><span class="p">:</span><span class="s2">"7a88cbe45a8a0840"</span><span class="p">,</span><span class="nl">"type"</span><span class="p">:</span><span class="s2">"switch"</span><span class="p">,</span><span class="nl">"z"</span><span class="p">:</span><span class="s2">"fec4b49ba92fcb02"</span><span class="p">,</span><span class="nl">"name"</span><span class="p">:</span><span class="s2">"off"</span><span class="p">,</span><span class="nl">"property"</span><span class="p">:</span><span class="s2">"payload"</span><span class="p">,</span><span class="nl">"propertyType"</span><span class="p">:</span><span class="s2">"msg"</span><span class="p">,</span><span class="nl">"rules"</span><span class="p">:[{</span><span class="nl">"t"</span><span class="p">:</span><span class="s2">"eq"</span><span class="p">,</span><span class="nl">"v"</span><span class="p">:</span><span class="s2">"off"</span><span class="p">,</span><span class="nl">"vt"</span><span class="p">:</span><span class="s2">"str"</span><span class="p">}],</span><span class="nl">"checkall"</span><span class="p">:</span><span class="s2">"true"</span><span class="p">,</span><span class="nl">"repair"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="nl">"outputs"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="nl">"x"</span><span class="p">:</span><span class="mi">1230</span><span class="p">,</span><span class="nl">"y"</span><span class="p">:</span><span class="mi">1400</span><span class="p">,</span><span class="nl">"wires"</span><span class="p">:[[</span><span class="s2">"5ac241fbc71c819a"</span><span class="p">]]},{</span><span class="nl">"id"</span><span class="p">:</span><span class="s2">"e1b158241ac56f2d"</span><span class="p">,</span><span class="nl">"type"</span><span class="p">:</span><span class="s2">"switch"</span><span class="p">,</span><span class="nl">"z"</span><span class="p">:</span><span class="s2">"fec4b49ba92fcb02"</span><span class="p">,</span><span class="nl">"name"</span><span class="p">:</span><span class="s2">"on"</span><span class="p">,</span><span class="nl">"property"</span><span class="p">:</span><span class="s2">"payload"</span><span class="p">,</span><span class="nl">"propertyType"</span><span class="p">:</span><span class="s2">"msg"</span><span class="p">,</span><span class="nl">"rules"</span><span class="p">:[{</span><span class="nl">"t"</span><span class="p">:</span><span class="s2">"eq"</span><span class="p">,</span><span class="nl">"v"</span><span class="p">:</span><span class="s2">"on"</span><span class="p">,</span><span class="nl">"vt"</span><span class="p">:</span><span class="s2">"str"</span><span class="p">}],</span><span class="nl">"checkall"</span><span class="p">:</span><span class="s2">"true"</span><span class="p">,</span><span class="nl">"repair"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="nl">"outputs"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="nl">"x"</span><span class="p">:</span><span class="mi">1230</span><span class="p">,</span><span class="nl">"y"</span><span class="p">:</span><span class="mi">1460</span><span class="p">,</span><span class="nl">"wires"</span><span class="p">:[[</span><span class="s2">"43963f905f72ddd8"</span><span class="p">]]},{</span><span class="nl">"id"</span><span class="p">:</span><span class="s2">"5ac241fbc71c819a"</span><span class="p">,</span><span class="nl">"type"</span><span class="p">:</span><span class="s2">"api-call-service"</span><span class="p">,</span><span class="nl">"z"</span><span class="p">:</span><span class="s2">"fec4b49ba92fcb02"</span><span class="p">,</span><span class="nl">"name"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="nl">"server"</span><span class="p">:</span><span class="s2">"a7e32585d87233f4"</span><span class="p">,</span><span class="nl">"version"</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span><span class="nl">"debugenabled"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="nl">"domain"</span><span class="p">:</span><span class="s2">"media_player"</span><span class="p">,</span><span class="nl">"service"</span><span class="p">:</span><span class="s2">"volume_set"</span><span class="p">,</span><span class="nl">"areaId"</span><span class="p">:[],</span><span class="nl">"deviceId"</span><span class="p">:[],</span><span class="nl">"entityId"</span><span class="p">:[</span><span class="s2">"media_player.living_room_speaker"</span><span class="p">],</span><span class="nl">"data"</span><span class="p">:</span><span class="s2">"{</span><span class="se">\"</span><span class="s2">volume_level</span><span class="se">\"</span><span class="s2">: 1.0}"</span><span class="p">,</span><span class="nl">"dataType"</span><span class="p">:</span><span class="s2">"json"</span><span class="p">,</span><span class="nl">"mergeContext"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="nl">"mustacheAltTags"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="nl">"outputProperties"</span><span class="p">:[],</span><span class="nl">"queue"</span><span class="p">:</span><span class="s2">"none"</span><span class="p">,</span><span class="nl">"x"</span><span class="p">:</span><span class="mi">1410</span><span class="p">,</span><span class="nl">"y"</span><span class="p">:</span><span class="mi">1400</span><span class="p">,</span><span class="nl">"wires"</span><span class="p">:[[</span><span class="s2">"b2af8179aa7c7953"</span><span class="p">]]},{</span><span class="nl">"id"</span><span class="p">:</span><span class="s2">"43963f905f72ddd8"</span><span class="p">,</span><span class="nl">"type"</span><span class="p">:</span><span class="s2">"api-call-service"</span><span class="p">,</span><span class="nl">"z"</span><span class="p">:</span><span class="s2">"fec4b49ba92fcb02"</span><span class="p">,</span><span class="nl">"name"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="nl">"server"</span><span class="p">:</span><span class="s2">"a7e32585d87233f4"</span><span class="p">,</span><span class="nl">"version"</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span><span class="nl">"debugenabled"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="nl">"domain"</span><span class="p">:</span><span class="s2">"media_player"</span><span class="p">,</span><span class="nl">"service"</span><span class="p">:</span><span class="s2">"volume_set"</span><span class="p">,</span><span class="nl">"areaId"</span><span class="p">:[],</span><span class="nl">"deviceId"</span><span class="p">:[],</span><span class="nl">"entityId"</span><span class="p">:[</span><span class="s2">"media_player.living_room_speaker"</span><span class="p">],</span><span class="nl">"data"</span><span class="p">:</span><span class="s2">"{</span><span class="se">\"</span><span class="s2">volume_level</span><span class="se">\"</span><span class="s2">: 1.0}"</span><span class="p">,</span><span class="nl">"dataType"</span><span class="p">:</span><span class="s2">"json"</span><span class="p">,</span><span class="nl">"mergeContext"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="nl">"mustacheAltTags"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="nl">"outputProperties"</span><span class="p">:[],</span><span class="nl">"queue"</span><span class="p">:</span><span class="s2">"none"</span><span class="p">,</span><span class="nl">"x"</span><span class="p">:</span><span class="mi">1410</span><span class="p">,</span><span class="nl">"y"</span><span class="p">:</span><span class="mi">1460</span><span class="p">,</span><span class="nl">"wires"</span><span class="p">:[[</span><span class="s2">"58259eec96fc6553"</span><span class="p">]]},{</span><span class="nl">"id"</span><span class="p">:</span><span class="s2">"b2af8179aa7c7953"</span><span class="p">,</span><span class="nl">"type"</span><span class="p">:</span><span class="s2">"api-call-service"</span><span class="p">,</span><span class="nl">"z"</span><span class="p">:</span><span class="s2">"fec4b49ba92fcb02"</span><span class="p">,</span><span class="nl">"name"</span><span class="p">:</span><span class="s2">"Joe, Don't forget your keys!"</span><span class="p">,</span><span class="nl">"server"</span><span class="p">:</span><span class="s2">"a7e32585d87233f4"</span><span class="p">,</span><span class="nl">"version"</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span><span class="nl">"debugenabled"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="nl">"domain"</span><span class="p">:</span><span class="s2">"tts"</span><span class="p">,</span><span class="nl">"service"</span><span class="p">:</span><span class="s2">"google_translate_say"</span><span class="p">,</span><span class="nl">"areaId"</span><span class="p">:[],</span><span class="nl">"deviceId"</span><span class="p">:[],</span><span class="nl">"entityId"</span><span class="p">:[</span><span class="s2">"media_player.living_room_speaker"</span><span class="p">],</span><span class="nl">"data"</span><span class="p">:</span><span class="s2">"{</span><span class="se">\t</span><span class="s2">   </span><span class="se">\"</span><span class="s2">message</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">Joe, Don't forget your keys!</span><span class="se">\"</span><span class="s2">,</span><span class="se">\t</span><span class="s2">   </span><span class="se">\"</span><span class="s2">cache</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">true</span><span class="se">\"\t</span><span class="s2">}"</span><span class="p">,</span><span class="nl">"dataType"</span><span class="p">:</span><span class="s2">"jsonata"</span><span class="p">,</span><span class="nl">"mergeContext"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="nl">"mustacheAltTags"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="nl">"outputProperties"</span><span class="p">:[],</span><span class="nl">"queue"</span><span class="p">:</span><span class="s2">"none"</span><span class="p">,</span><span class="nl">"x"</span><span class="p">:</span><span class="mi">1700</span><span class="p">,</span><span class="nl">"y"</span><span class="p">:</span><span class="mi">1400</span><span class="p">,</span><span class="nl">"wires"</span><span class="p">:[[]]},{</span><span class="nl">"id"</span><span class="p">:</span><span class="s2">"58259eec96fc6553"</span><span class="p">,</span><span class="nl">"type"</span><span class="p">:</span><span class="s2">"api-call-service"</span><span class="p">,</span><span class="nl">"z"</span><span class="p">:</span><span class="s2">"fec4b49ba92fcb02"</span><span class="p">,</span><span class="nl">"name"</span><span class="p">:</span><span class="s2">"Welcome!"</span><span class="p">,</span><span class="nl">"server"</span><span class="p">:</span><span class="s2">"a7e32585d87233f4"</span><span class="p">,</span><span class="nl">"version"</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span><span class="nl">"debugenabled"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="nl">"domain"</span><span class="p">:</span><span class="s2">"tts"</span><span class="p">,</span><span class="nl">"service"</span><span class="p">:</span><span class="s2">"google_translate_say"</span><span class="p">,</span><span class="nl">"areaId"</span><span class="p">:[],</span><span class="nl">"deviceId"</span><span class="p">:[],</span><span class="nl">"entityId"</span><span class="p">:[</span><span class="s2">"media_player.living_room_speaker"</span><span class="p">],</span><span class="nl">"data"</span><span class="p">:</span><span class="s2">"{</span><span class="se">\t</span><span class="s2">   </span><span class="se">\"</span><span class="s2">message</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">Welcome!</span><span class="se">\"</span><span class="s2">,</span><span class="se">\t</span><span class="s2">   </span><span class="se">\"</span><span class="s2">cache</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">true</span><span class="se">\"\t</span><span class="s2">}"</span><span class="p">,</span><span class="nl">"dataType"</span><span class="p">:</span><span class="s2">"jsonata"</span><span class="p">,</span><span class="nl">"mergeContext"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="nl">"mustacheAltTags"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="nl">"outputProperties"</span><span class="p">:[],</span><span class="nl">"queue"</span><span class="p">:</span><span class="s2">"none"</span><span class="p">,</span><span class="nl">"x"</span><span class="p">:</span><span class="mi">1640</span><span class="p">,</span><span class="nl">"y"</span><span class="p">:</span><span class="mi">1460</span><span class="p">,</span><span class="nl">"wires"</span><span class="p">:[[]]},{</span><span class="nl">"id"</span><span class="p">:</span><span class="s2">"376c8512cb3712ff"</span><span class="p">,</span><span class="nl">"type"</span><span class="p">:</span><span class="s2">"mqtt in"</span><span class="p">,</span><span class="nl">"z"</span><span class="p">:</span><span class="s2">"fec4b49ba92fcb02"</span><span class="p">,</span><span class="nl">"name"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="nl">"topic"</span><span class="p">:</span><span class="s2">"zigbee2mqtt/main_door_contact_sensor_key_holder"</span><span class="p">,</span><span class="nl">"qos"</span><span class="p">:</span><span class="s2">"2"</span><span class="p">,</span><span class="nl">"datatype"</span><span class="p">:</span><span class="s2">"json"</span><span class="p">,</span><span class="nl">"broker"</span><span class="p">:</span><span class="s2">"d038737d9ec4f893"</span><span class="p">,</span><span class="nl">"nl"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="nl">"rap"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span><span class="nl">"rh"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="nl">"inputs"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="nl">"x"</span><span class="p">:</span><span class="mi">230</span><span class="p">,</span><span class="nl">"y"</span><span class="p">:</span><span class="mi">1480</span><span class="p">,</span><span class="nl">"wires"</span><span class="p">:[[</span><span class="s2">"4486b9ce45a6f9c2"</span><span class="p">]]},{</span><span class="nl">"id"</span><span class="p">:</span><span class="s2">"4486b9ce45a6f9c2"</span><span class="p">,</span><span class="nl">"type"</span><span class="p">:</span><span class="s2">"switch"</span><span class="p">,</span><span class="nl">"z"</span><span class="p">:</span><span class="s2">"fec4b49ba92fcb02"</span><span class="p">,</span><span class="nl">"name"</span><span class="p">:</span><span class="s2">"contact is true"</span><span class="p">,</span><span class="nl">"property"</span><span class="p">:</span><span class="s2">"payload.contact"</span><span class="p">,</span><span class="nl">"propertyType"</span><span class="p">:</span><span class="s2">"msg"</span><span class="p">,</span><span class="nl">"rules"</span><span class="p">:[{</span><span class="nl">"t"</span><span class="p">:</span><span class="s2">"true"</span><span class="p">}],</span><span class="nl">"checkall"</span><span class="p">:</span><span class="s2">"true"</span><span class="p">,</span><span class="nl">"repair"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="nl">"outputs"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="nl">"x"</span><span class="p">:</span><span class="mi">520</span><span class="p">,</span><span class="nl">"y"</span><span class="p">:</span><span class="mi">1480</span><span class="p">,</span><span class="nl">"wires"</span><span class="p">:[[</span><span class="s2">"fc1a27b69e93bc3f"</span><span class="p">]]},{</span><span class="nl">"id"</span><span class="p">:</span><span class="s2">"fc1a27b69e93bc3f"</span><span class="p">,</span><span class="nl">"type"</span><span class="p">:</span><span class="s2">"reusable"</span><span class="p">,</span><span class="nl">"z"</span><span class="p">:</span><span class="s2">"fec4b49ba92fcb02"</span><span class="p">,</span><span class="nl">"name"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="nl">"target"</span><span class="p">:</span><span class="s2">"set media player idle"</span><span class="p">,</span><span class="nl">"outputs"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="nl">"x"</span><span class="p">:</span><span class="mi">720</span><span class="p">,</span><span class="nl">"y"</span><span class="p">:</span><span class="mi">1480</span><span class="p">,</span><span class="nl">"wires"</span><span class="p">:[[</span><span class="s2">"6f8a259d3efb8e8a"</span><span class="p">]]},{</span><span class="nl">"id"</span><span class="p">:</span><span class="s2">"6f8a259d3efb8e8a"</span><span class="p">,</span><span class="nl">"type"</span><span class="p">:</span><span class="s2">"api-call-service"</span><span class="p">,</span><span class="nl">"z"</span><span class="p">:</span><span class="s2">"fec4b49ba92fcb02"</span><span class="p">,</span><span class="nl">"name"</span><span class="p">:</span><span class="s2">"notification_sound.wav"</span><span class="p">,</span><span class="nl">"server"</span><span class="p">:</span><span class="s2">"a7e32585d87233f4"</span><span class="p">,</span><span class="nl">"version"</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span><span class="nl">"debugenabled"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="nl">"domain"</span><span class="p">:</span><span class="s2">"media_player"</span><span class="p">,</span><span class="nl">"service"</span><span class="p">:</span><span class="s2">"play_media"</span><span class="p">,</span><span class="nl">"areaId"</span><span class="p">:[],</span><span class="nl">"deviceId"</span><span class="p">:[],</span><span class="nl">"entityId"</span><span class="p">:[</span><span class="s2">"media_player.living_room_speaker"</span><span class="p">],</span><span class="nl">"data"</span><span class="p">:</span><span class="s2">"{</span><span class="se">\"</span><span class="s2">media_content_id</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">http://192.168.1.80/notification_sound.wav</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">media_content_type</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">audio/mp3</span><span class="se">\"</span><span class="s2">}"</span><span class="p">,</span><span class="nl">"dataType"</span><span class="p">:</span><span class="s2">"json"</span><span class="p">,</span><span class="nl">"mergeContext"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="nl">"mustacheAltTags"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="nl">"outputProperties"</span><span class="p">:[],</span><span class="nl">"queue"</span><span class="p">:</span><span class="s2">"none"</span><span class="p">,</span><span class="nl">"x"</span><span class="p">:</span><span class="mi">940</span><span class="p">,</span><span class="nl">"y"</span><span class="p">:</span><span class="mi">1480</span><span class="p">,</span><span class="nl">"wires"</span><span class="p">:[[]]},{</span><span class="nl">"id"</span><span class="p">:</span><span class="s2">"d038737d9ec4f893"</span><span class="p">,</span><span class="nl">"type"</span><span class="p">:</span><span class="s2">"mqtt-broker"</span><span class="p">,</span><span class="nl">"name"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="nl">"broker"</span><span class="p">:</span><span class="s2">"mosquitto"</span><span class="p">,</span><span class="nl">"port"</span><span class="p">:</span><span class="s2">"1883"</span><span class="p">,</span><span class="nl">"clientid"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="nl">"autoConnect"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span><span class="nl">"usetls"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="nl">"protocolVersion"</span><span class="p">:</span><span class="s2">"4"</span><span class="p">,</span><span class="nl">"keepalive"</span><span class="p">:</span><span class="s2">"60"</span><span class="p">,</span><span class="nl">"cleansession"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span><span class="nl">"birthTopic"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="nl">"birthQos"</span><span class="p">:</span><span class="s2">"0"</span><span class="p">,</span><span class="nl">"birthPayload"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="nl">"birthMsg"</span><span class="p">:{},</span><span class="nl">"closeTopic"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="nl">"closeQos"</span><span class="p">:</span><span class="s2">"0"</span><span class="p">,</span><span class="nl">"closePayload"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="nl">"closeMsg"</span><span class="p">:{},</span><span class="nl">"willTopic"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="nl">"willQos"</span><span class="p">:</span><span class="s2">"0"</span><span class="p">,</span><span class="nl">"willPayload"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="nl">"willMsg"</span><span class="p">:{},</span><span class="nl">"sessionExpiry"</span><span class="p">:</span><span class="s2">""</span><span class="p">},{</span><span class="nl">"id"</span><span class="p">:</span><span class="s2">"a7e32585d87233f4"</span><span class="p">,</span><span class="nl">"type"</span><span class="p">:</span><span class="s2">"server"</span><span class="p">,</span><span class="nl">"name"</span><span class="p">:</span><span class="s2">"Home Assistant"</span><span class="p">,</span><span class="nl">"version"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="nl">"addon"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="nl">"rejectUnauthorizedCerts"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span><span class="nl">"ha_boolean"</span><span class="p">:</span><span class="s2">"y|yes|true|on|home|open"</span><span class="p">,</span><span class="nl">"connectionDelay"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span><span class="nl">"cacheJson"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span><span class="nl">"heartbeat"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="nl">"heartbeatInterval"</span><span class="p">:</span><span class="s2">"30"</span><span class="p">}]</span><span class="w">
+</span></code></pre></div></div>]]></content><author><name></name></author><category term="home-automation" /><category term="node-red" /><category term="hack" /><category term="sonoff" /><category term="mqtt" /><summary type="html"><![CDATA[Hace poco me quedé fuera del apartamento, afortunadamente era horario normal y pude pedirle al conserje que me abriera la puerta, si esto sucede después de las 10:00 p. m., según las políticas recientes, me cobrarían 100 USD en multas.]]></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://blog.k014.net/2022/06/15/keys-placed.png" /><media:content medium="image" url="https://blog.k014.net/2022/06/15/keys-placed.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Hack NFC para sofa</title><link href="https://blog.k014.net/2022/05/22/nfc-sofa-hack.html" rel="alternate" type="text/html" title="Hack NFC para sofa" /><published>2022-05-22T00:00:00+00:00</published><updated>2022-05-22T00:00:00+00:00</updated><id>https://blog.k014.net/2022/05/22/nfc-sofa-hack</id><content type="html" xml:base="https://blog.k014.net/2022/05/22/nfc-sofa-hack.html"><![CDATA[<p>Cuando comencé a jugar con la domótica, compré este paquete de
+<a href="https://www.amazon.com/dp/B08DD24Z5K">50 tarjetas redondas NFC215</a>. Estas son
+etiquetas que pueden almacenar hasta 540 bytes de datos, lo cual es suficiente
+para mensajes cortos como enlaces web, intercambio de información personal,
+intercambio de credenciales <em>wifi</em>, etc. En esta oportunidad quería usarlos como una
+forma de alternar las luces de la sala de estar.</p>
+
+<p><img src="https://youtu.be/tqbdaos9qr0" alt="" /></p>
+
+<p>Al principio quería que la etiqueta NFC se programara para enviar un simple
+mensaje UDP simple a una IP específica (mi servidor de domótica se ejecuta en
+una Raspberry Pi 4), pero resulta que el estándar para las acciones NFC que se
+pueden programar es muy limitado. como abrir enlaces web, crear un
+nuevo contacto en un teléfono o agregar nuevas credenciales <em>wifi</em>. para hacer
+esto hay software que te permite programar muchas de acciones como enviar
+paquetes UDP, activar bluetooth, encender la luz del telefono, etc. El único
+problema es que el teléfono lector necesita tener instalado el software que
+interpreta la acción, lo bueno es que, el software
+<a href="https://play.google.com/store/apps/details?id=com.wakdev.nfctools.prohttps://play.google.com/store/apps/details?id=com.wakdev.nfctools.pro">(NFC Tools Pro)</a>
+hace esto de manera inteligente, cuando agrega una acción personalizada, en
+realidad crea 2 acciones en la etiqueta NFC: una para visitar el enlace de la
+página de Google Play del software para descargar, y si el teléfono ya tiene la
+aplicacion, entonces solo ejecutará la acción, esto es aceptable.</p>
+
+<figure class="
+  figure
+  mx-auto
+  d-block
+  w-75
+  ">
+<img class="shadow-sm border p-2 figure-img img-fluid rounded" src="/assets/images/generated/2022/05/22/nfc-sofa-tag-800-23115b486.png" alt="Insertando la etiqueta NFC en el brazo del sofa" srcset="/assets/images/generated/2022/05/22/nfc-sofa-tag-400-23115b486.png 400w, /assets/images/generated/2022/05/22/nfc-sofa-tag-600-23115b486.png 600w, /assets/images/generated/2022/05/22/nfc-sofa-tag-800-23115b486.png 800w, /assets/images/generated/2022/05/22/nfc-sofa-tag-1000-23115b486.png 1000w" />
+
+  <figcaption class="figure-caption text-end">Insertando la etiqueta NFC en el brazo del sofa</figcaption>
+</figure>
+
+<p>Lo que terminé haciendo fue enviar una solicitud POST a mi Raspberry Pi con una
+identificación única que describe la posición de esta etiqueta NFC, por lo
+tanto, la acción real de encender las luces la decide luego el Raspberryi Pi
+central, la etiqueta NFC solo envía el mensaje con su ID, esto me permite
+configurar y modificar la acción final fácilmente sin tener que volver a
+programar la etiqueta NFC.</p>
+
+<p>El mensaje POST es capturado posteriormente por una instancia de
+<a href="https://nodered.org/">Node-RED</a></p>
+
+<figure class="
+  figure
+  mx-auto
+  d-block
+  
+  ">
+<a href="/assets/images/fullsize/2022/05/22/nodered.png">
+  <img class="shadow-sm border p-2 figure-img img-fluid rounded" src="/assets/images/generated/2022/05/22/nodered-800-3c6a5a1bd.png" alt="Node-Red screenshot" srcset="/assets/images/generated/2022/05/22/nodered-400-3c6a5a1bd.png 400w, /assets/images/generated/2022/05/22/nodered-600-3c6a5a1bd.png 600w, /assets/images/generated/2022/05/22/nodered-800-3c6a5a1bd.png 800w, /assets/images/generated/2022/05/22/nodered-876-3c6a5a1bd.png 876w" />
+</a>
+
+  <figcaption class="figure-caption text-end">Node-Red screenshot</figcaption>
+</figure>
+
+<p>El cual toma el mensaje y filtra la identificación (en el caso del sofá, la
+identificación sería <code class="language-plaintext highlighter-rouge">living_room_nfc_tag_sofa_right_arm</code>) y asigna una acción,
+por ahora todas las etiquetas NFC que tengo son para alternar el grupo de luces
+de la sala creado en <a href="https://www.home-assistant.io/">Home Assistant</a>, pero se
+ve cómo se puede usar esto para otras cosas, como reproducir música, encender
+la cafetera, el aire acondicionado, depositar comida al plato de una mascota,
+enviar un mensaje MQTT o incluso activar cualquier comando de Linux.</p>]]></content><author><name></name></author><category term="nfc" /><category term="home-automation" /><category term="node-red" /><category term="hack" /><summary type="html"><![CDATA[Cuando comencé a jugar con la domótica, compré este paquete de 50 tarjetas redondas NFC215. Estas son etiquetas que pueden almacenar hasta 540 bytes de datos, lo cual es suficiente para mensajes cortos como enlaces web, intercambio de información personal, intercambio de credenciales wifi, etc. En esta oportunidad quería usarlos como una forma de alternar las luces de la sala de estar.]]></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://blog.k014.net/2022/05/22/nfc-sofa-tag.png" /><media:content medium="image" url="https://blog.k014.net/2022/05/22/nfc-sofa-tag.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry></feed>

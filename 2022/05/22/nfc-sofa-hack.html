@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- custom -->
+  <link rel="stylesheet" href="/assets/css/k014-styles.css">
+<link type="application/atom+xml" rel="alternate" href="https://blog.k014.net/feed.xml" title="k014's Blog">
+</head>
+<body>
+<div class="k014-header d-flex justify-content-between align-items-end m-5">
+  <div class="k014-header-logo">
+    <a href="/">
+      <img src="/assets/images/generated/k014-logo-500-e2abbc098.png" srcset="/assets/images/generated/k014-logo-400-e2abbc098.png 400w, /assets/images/generated/k014-logo-500-e2abbc098.png 500w">
+
+    </a>
+  </div>
+  <div class="k014-header-language-toggle justify-content-end">
+<a href="/es">
+      <img src="/assets/images/generated/spain_circle-200-d0164d4f6.png" srcset="/assets/images/generated/spain_circle-200-d0164d4f6.png 200w">
+
+    </a>
+  </div>
+</div>
+<article itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="k014-post-header start-0">
+    <div class="k014-post-header-image" style="background-image: url(/assets/images/generated/2022/05/22/nfc-sofa-tag-768-480f2ea72.png)"></div>
+    <div class="col k014-post-header-headline pt-3 pb-4">
+      <div class="d-sm-none h-100">
+        <div class="k014-headline d-flex flex-column h-100">
+  <h1 itemprop="name headline" class="my-0">NFC Sofa Hack</h1>
+  <time datetime="2022-05-22T00:00:00+00:00" itemprop="datePublished">May 22, 2022
+  </time>
+</div>
+
+      </div>
+      <div class="d-none d-sm-block">
+        <div class="k014-headline d-flex flex-column h-100">
+  <h1 itemprop="name headline" class="my-0">NFC Sofa Hack</h1>
+  <time datetime="2022-05-22T00:00:00+00:00" itemprop="datePublished">May 22, 2022
+  </time><div class="k014-tags mt-auto d-flex flex-wrap">
+<span class="rounded-pill py-1 px-3 me-1 mb-1">nfc</span><span class="rounded-pill py-1 px-3 me-1 mb-1">home-automation</span><span class="rounded-pill py-1 px-3 me-1 mb-1">node-red</span><span class="rounded-pill py-1 px-3 me-1 mb-1">hack</span>
+</div>
+</div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="k014-post-content">
+    <div class="d-sm-none mb-3">
+      <div class="k014-tags mt-auto d-flex flex-wrap">
+<span class="rounded-pill py-1 px-3 me-1 mb-1">nfc</span><span class="rounded-pill py-1 px-3 me-1 mb-1">home-automation</span><span class="rounded-pill py-1 px-3 me-1 mb-1">node-red</span><span class="rounded-pill py-1 px-3 me-1 mb-1">hack</span>
+</div>
+
+    </div>
+    <p>When I started playing with home automation I purchased this pack of
+<a href="https://www.amazon.com/dp/B08DD24Z5K">50 NFC215 Round Cards</a> this are tags
+that can hold up to
+<a href="https://www.shopnfc.com/en/content/6-nfc-tags-specs">540 bytes of data</a>,
+which is enough for short messages like web links, personal information
+sharing, wifi credentials sharing, etc. in this opportunity I wanted to used
+them as a
+way to toggle the living room lights.</p>
+
+<p><iframe id="media-tqbdaos9qr0" class="media" src="https://www.youtube.com/embed/tqbdaos9qr0" title="" width="100%" height="350" style="max-width: 600px;outline: none" allow="encrypted-media; picture-in-picture" frameborder="0" allowfullscreen></iframe></p>
+
+<p>At first I wanted the NFC tag to be programmed to send a simple UDP message to
+a specific IP (my home automation server running on a Raspberry Pi 4), but it
+turns out that the standard for NFC actions that can be programmed is very
+limited to just open web links, create a new contact on a phone, or add new
+Wifi credentials.  in order make this there are software that allows you to
+program tons of actions like sending UDP packets, turn on bluetooth, turn on
+the phone’s flashlight, etc. The only catch is that the reading phone needs to
+have installed the software that interprets the action, the good thing is that,
+the software
+<a href="https://play.google.com/store/apps/details?id=com.wakdev.nfctools.prohttps://play.google.com/store/apps/details?id=com.wakdev.nfctools.pro">(NFC Tools Pro)</a>
+does this in a clever way, when adding a custom action it actually creates 2
+actions in the NFC tag: one to visit the link of the software google play page
+for download, and if the phone already have the app, it will just execute the
+action, so I am ok with this then.</p>
+
+<figure class="
+  figure
+  mx-auto
+  d-block
+  w-75
+  ">
+<img class="shadow-sm border p-2 figure-img img-fluid rounded" src="/assets/images/generated/2022/05/22/nfc-sofa-tag-800-23115b486.png" alt="Inserting the NFC tag inside sofa armrest" srcset="/assets/images/generated/2022/05/22/nfc-sofa-tag-400-23115b486.png 400w, /assets/images/generated/2022/05/22/nfc-sofa-tag-600-23115b486.png 600w, /assets/images/generated/2022/05/22/nfc-sofa-tag-800-23115b486.png 800w, /assets/images/generated/2022/05/22/nfc-sofa-tag-1000-23115b486.png 1000w">
+
+  <figcaption class="figure-caption text-end">Inserting the NFC tag inside sofa armrest</figcaption>
+</figure>
+
+<p>What I ended up doing is sending a POST request to my Raspberry Pi with a
+unique id that describes the position of this NFC tag, therefore, the actual
+action of turning on the lights is later decided by the central Raspberryi Pi,
+the NFC tag only sends the message with it’s ID, this allows me to configure
+and alter the final action easily without having to re-program the NFC tag.</p>
+
+<p>The POST messgage is later captured by an instance of
+<a href="https://nodered.org/">Node-RED</a></p>
+
+<figure class="
+  figure
+  mx-auto
+  d-block
+  
+  ">
+<a href="/assets/images/fullsize/2022/05/22/nodered.png">
+  <img class="shadow-sm border p-2 figure-img img-fluid rounded" src="/assets/images/generated/2022/05/22/nodered-800-3c6a5a1bd.png" alt="Node-Red screenshot" srcset="/assets/images/generated/2022/05/22/nodered-400-3c6a5a1bd.png 400w, /assets/images/generated/2022/05/22/nodered-600-3c6a5a1bd.png 600w, /assets/images/generated/2022/05/22/nodered-800-3c6a5a1bd.png 800w, /assets/images/generated/2022/05/22/nodered-876-3c6a5a1bd.png 876w">
+</a>
+
+  <figcaption class="figure-caption text-end">Node-Red screenshot</figcaption>
+</figure>
+
+<p>Which takes the payload and filters the <code class="language-plaintext highlighter-rouge">id</code> (in the case of the sofa the id
+would be <code class="language-plaintext highlighter-rouge">living_room_nfc_tag_sofa_right_arm</code>) and assign an action, for now
+all the nfc tags that I have around are for toggling the living room lights
+group created on <a href="https://www.home-assistant.io/">Home Assistant</a>, but you can
+see how this can be used for other stuff like playing music, turn on the coffee
+machine, the air conditioner, drop more food to a pet bowl, send an MQTT
+message, or even triggering any linux command.</p>
+
+
+    <script src="https://giscus.app/client.js" data-repo="joecabezas/joecabezas.github.io" data-repo-id="R_kgDOHfi5ig" data-category="General" data-category-id="DIC_kwDOHfi5is4CPr3-" data-mapping="pathname" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="dark" data-lang="en" data-loading="lazy" crossorigin="anonymous" async>
+    </script>
+  </div>
+</article>
+<footer>
+  <div class="jump"></div>
+  <div class="container d-flex py-5 justify-content-between align-items-center">
+    <div class="col-4 d-flex">
+      <a href="/">
+  <img src="/assets/images/generated/k014-logo-500-e2abbc098.png" srcset="/assets/images/generated/k014-logo-400-e2abbc098.png 400w, /assets/images/generated/k014-logo-500-e2abbc098.png 500w">
+</a>
+
+    </div>
+    <ul class="col-4 justify-content-end list-unstyled d-flex my-auto">
+<li class="ms-3">
+        <a href="https://github.com/joecabezas">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-github" viewbox="0 0 16 16">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path>
+          </svg>
+        </a>
+      </li>
+<li class="ms-3">
+        <a href="https://www.linkedin.com/in/joecabezas">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-linkedin" viewbox="0 0 16 16">
+            <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z"></path>
+          </svg>
+        </a>
+      </li>
+<li class="ms-3">
+        <a href="https://www.twitter.com/joecabezas">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-twitter" viewbox="0 0 16 16">
+            <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z"></path>
+          </svg>
+        </a>
+      </li>
+<li class="ms-3">
+        <a href="https://youtube.com/channel/UC2UAfk6AmlYo0rjiHern06A">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-youtube" viewbox="0 0 16 16">
+            <path d="M8.051 1.999h.089c.822.003 4.987.033 6.11.335a2.01 2.01 0 0 1 1.415 1.42c.101.38.172.883.22 1.402l.01.104.022.26.008.104c.065.914.073 1.77.074 1.957v.075c-.001.194-.01 1.108-.082 2.06l-.008.105-.009.104c-.05.572-.124 1.14-.235 1.558a2.007 2.007 0 0 1-1.415 1.42c-1.16.312-5.569.334-6.18.335h-.142c-.309 0-1.587-.006-2.927-.052l-.17-.006-.087-.004-.171-.007-.171-.007c-1.11-.049-2.167-.128-2.654-.26a2.007 2.007 0 0 1-1.415-1.419c-.111-.417-.185-.986-.235-1.558L.09 9.82l-.008-.104A31.4 31.4 0 0 1 0 7.68v-.123c.002-.215.01-.958.064-1.778l.007-.103.003-.052.008-.104.022-.26.01-.104c.048-.519.119-1.023.22-1.402a2.007 2.007 0 0 1 1.415-1.42c.487-.13 1.544-.21 2.654-.26l.17-.007.172-.006.086-.003.171-.007A99.788 99.788 0 0 1 7.858 2h.193zM6.4 5.209v4.818l4.157-2.408L6.4 5.209z"></path>
+          </svg>
+        </a>
+      </li>
+<li class="ms-3">
+        <a href="/feed.xml">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-rss-fill" viewbox="0 0 16 16">
+            <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm1.5 2.5c5.523 0 10 4.477 10 10a1 1 0 1 1-2 0 8 8 0 0 0-8-8 1 1 0 0 1 0-2zm0 4a6 6 0 0 1 6 6 1 1 0 1 1-2 0 4 4 0 0 0-4-4 1 1 0 0 1 0-2zm.5 7a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"></path>
+          </svg>
+        </a>
+      </li>
+</ul>
+</div>
+  
+  <!-- <p>I use this space as a way to document what I am currently studying and projects I am working on, I hope you find something useful around</p> -->
+</footer>
+</body>
+</html>
