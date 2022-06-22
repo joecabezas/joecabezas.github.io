@@ -1,11 +1,12 @@
 <div class="k014-header d-flex justify-content-between align-items-end m-5">
   <div class="k014-header-logo">
-    {%
-    picture
-    logo
-    k014-logo.png
-    --link {{ site.baseurl }}
-    %}
+    <a href="{{ site.baseurl | default: '/' }}">
+      {%
+      picture
+      logo
+      k014-logo.png
+      %}
+    </a>
   </div>
   <div class="k014-header-language-toggle justify-content-end">
     {%- assign lang = '' -%}

@@ -151,12 +151,11 @@ $k014-post-content-padding: 6em;
 $k014-post-content-vertical-offset: -5vh;
 article {
   background-color: $body-bg;
-  z-index: 0;
   @include border-bottom-radius(2.5em);
+  position: relative;
 
   .k014-post-header {
     position: relative;
-    z-index: -1;
     height: 35vh;
 
     .k014-post-header-image {
@@ -165,7 +164,6 @@ article {
       height: 100%;
       background: no-repeat center center;
       background-size: cover;
-      z-index: -1;
 
       &::after {
         display: block;
@@ -185,6 +183,7 @@ article {
     }
 
     .k014-post-header-headline {
+      position: relative;
       width: 50%;
       height: calc(100% + #{$k014-post-content-vertical-offset});
       margin: auto;
@@ -207,6 +206,7 @@ article {
 
   .k014-post-content {
     @include make-container();
+    position: relative;
     background-color: $body-bg;
     margin-top: $k014-post-content-vertical-offset;
     padding-top: calc(#{$k014-post-content-padding} - 4em);
@@ -230,6 +230,32 @@ article {
       margin-bottom: 1.2em;
 
       font-size: 1.2em;
+    }
+
+    $k014-highlighter-rouge-padding-x: 8px;
+    $k014-highlighter-rouge-padding-y: 5px;
+    code.highlighter-rouge {
+      color: $dt-yellow;
+      background: $dt-gray-dark;
+      padding-right: $k014-highlighter-rouge-padding-x;
+      padding-left: $k014-highlighter-rouge-padding-x;
+      padding-top: $k014-highlighter-rouge-padding-y;
+      padding-bottom: $k014-highlighter-rouge-padding-y;
+      border: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
+      border-radius: $border-radius-lg;
+    }
+
+    div.highlighter-rouge {
+      box-shadow: $dt-cyan 0px 0px 10px 1px;
+
+      div.highlight {
+        code, pre {
+          padding: 12px;
+          background: transparent;
+          background-color: transparent;
+          border: 0;
+        }
+      }
     }
   }
 }

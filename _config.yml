@@ -32,7 +32,7 @@ youtube_channel_id: UC2UAfk6AmlYo0rjiHern06A
 rss: rss
 
 # Build settings
-theme: minima
+#theme: minima
 
 plugins:
   - jekyll-feed
